@@ -1,0 +1,11 @@
+Name=ugcaller
+Type=Application
+Exec=/opt/apps/com.samsung.ugcaller/bin/ugcaller
+Icon=
+Nodisplay=True
+Version=0.1.0
+Comment=
+MimeType=
+X-Tizen-TaskManage=False
+X-Tizen-Multiple=True
+X-Tizen-SVC=http://tizen.org/appcontrol/operation/ugtest/NULL/NULL

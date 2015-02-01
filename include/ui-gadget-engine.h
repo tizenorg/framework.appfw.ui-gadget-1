@@ -23,18 +23,7 @@
 #define __UI_GADGET_ENGINE_H__
 
 /**
- * @defgroup	UI_Gadget_For_Developer Developer API Reference Guide
- * @ingroup	UI_Gadget
- * @brief	A engine to develop a UI gadget. Callees (UI gadgets) uses this engines and APIs. (callee -> caller)
- *
- * @section Header To Use Them:
- * @code
- * #include <ui-gadget-engine.h>
- * @endcode
- */
-
-/**
- * @addtogroup UI_Gadget_For_Developer
+ * @addtogroup CORE_LIB_GROUP_UI_GADGET_ENGINE_MODULE
  * @{
  */
 
@@ -46,7 +35,6 @@ extern "C" {
 
 /**
  * UI gadget engine operation type
- * @see @ref lifecycle_sec
  */
 struct ug_engine_ops {
 	/** create operation */

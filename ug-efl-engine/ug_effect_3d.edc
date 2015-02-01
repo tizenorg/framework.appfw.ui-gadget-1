@@ -1,0 +1,299 @@
+//TRANSLATION EFFECT
+
+collections {
+	base_scale: 1.8;
+	group {
+		name: "ug_effect";
+		parts {
+			part { name: "bg";
+				type: RECT;
+				description {
+					state: "default" 0.0;
+					color: 0 0 0 255;
+					rel1 { relative: 0.0 0.0; }
+					rel2 { relative: 1.0 1.0; }
+				}
+			}
+			part { name: "point_prev1";
+				type: RECT;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					color: 0 0 0 0;
+					rel1 { relative: 0.0 0.0; }
+					rel2 { relative: 0.0 1.0; }
+				}
+			}
+			part { name: "point_prev2";
+				type: RECT;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					color: 0 0 0 0;
+					rel1 { relative: -0.1 0.0; }
+					rel2 { relative: -0.1 1.0; }
+					perspective {
+						zplane: -135;
+						focal: 1000;
+					}
+				}
+			}
+			part { name: "point1";
+				type: RECT;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					color: 0 0 0 0;
+					rel1 { relative: 1.0 0.0; }
+					rel2 { relative: 1.0 1.0; }
+				}
+			}
+			part { name: "point2";
+				type: RECT;
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					color: 0 0 0 0;
+					rel1 { relative: 0.0 0.0; }
+					rel2 { relative: 0.0 1.0; }
+				}
+			}
+			part {
+				name: "elm.swallow.content_prev";
+				type: SWALLOW;
+				description {
+					state: "default" 0.0;
+					rel1 { relative: 0.0 0.0; }
+					rel2 { relative: 1.0 1.0; }
+				}
+				description { state: "map_transition" 0.0;
+					inherit: "default" 0.0;
+					color: 86 76 65 255;
+					map {
+						perspective: "point_prev1";
+						on: 1;
+						smooth: 1;
+						perspective_on: 1;
+						backface_cull: 1;
+						rotation {
+							center: "point_prev1";
+							x: 0;
+							y: 0;
+							z: 0;
+						}
+					}
+				}
+				description {
+					state: "hide" 0.0;
+					inherit: "default" 0.0;
+					visible: 0;
+				}
+				description {
+					state: "show" 0.0;
+					inherit: "default" 0.0;
+					map {
+						perspective: "point_prev2";
+						on: 1;
+						smooth: 1;
+						perspective_on: 1;
+						backface_cull: 1;
+						rotation {
+							center: "point_prev2";
+							x: 0;
+							y: 60;
+							z: 0;
+						}
+					}
+				}
+			}
+			part { name: "bg_shawdow";
+				type: RECT;
+				effect: OUTLINE;
+				effect: OUTLINE_SHADOW;
+				effect: SHADOW;
+				effect: FAR_SHADOW;
+				effect: GLOW;
+
+				description {
+					state: "default" 0.0;
+					color: 0 255 255 255;
+					rel1 { relative: 1.0 0.0; }
+					rel2 { relative: 2.0 1.0; }
+				}
+				description {
+					state: "show" 0.0;
+					inherit: "default" 0.0;
+					rel1 { relative: 0.0 0.0; }
+					rel2 { relative: 1.0 1.0; }
+				}
+			}
+			part {
+				name: "elm.swallow.content";
+				type: SWALLOW;
+				description {
+					state: "default" 0.0;
+					rel1 { relative: 1 0; }
+					rel2 { relative: 2 1; }
+					visible: 0;
+				}
+				description {
+					state: "map_transition" 0.0;
+					rel1 { relative: 1 0; }
+					rel2 { relative: 2 1; }
+					color: 86 76 65 255;
+					map {
+						perspective: "point1";
+						on: 1;
+						smooth: 1;
+						perspective_on: 1;
+						backface_cull: 1;
+						rotation {
+							center: "point1";
+							x: 0;
+							y: 60;
+							z: 0;
+						}
+					}
+				}
+				description {
+					state: "show" 0.0;
+					rel1 { relative: 0 0; }
+					rel2 { relative: 1 1; }
+					map {
+						perspective: "point2";
+						on: 1;
+						smooth: 1;
+						perspective_on: 1;
+						backface_cull: 1;
+						rotation {
+							center: "point2";
+							x: 0;
+							y: 0;
+							z: 0;
+						}
+					}
+				}
+				description {
+					state: "hide" 0.0;
+					inherit: "default" 0.0;
+					visible: 0;
+				}
+			}
+			part {
+				name: "event_blocker";
+				description {
+					state: "default" 0.0;
+					visible: 1;
+				}
+				description {
+					state: "show" 0.0;
+					inherit: "default" 0.0;
+				}
+				description {
+					state: "map_transition" 0.0;
+					inherit: "default" 0.0;
+				}
+				description {
+					state: "disabled" 0.0;
+					inherit: "default" 0.0;
+					visible: 0;
+				}
+			}
+		}
+		programs {
+			program {
+				name: "show";
+				signal: "elm,state,show";
+				action: STATE_SET "map_transition" 0.0;
+				target: "elm.swallow.content";
+				target: "elm.swallow.content_prev";
+				after: "show_start";
+			}
+			program {
+				name: "show_start";
+				action: STATE_SET "show" 0.0;
+				target: "elm.swallow.content";
+				target: "elm.swallow.content_prev";
+//				target: "bg_shawdow";
+				target: "event_blocker";
+				transition: ACCELERATE 0.5;
+				after: "show_end";
+			}
+			program {
+				name: "hide";
+				signal: "elm,state,hide";
+				action: STATE_SET "map_transition" 0.0;
+				target: "elm.swallow.content";
+				target: "elm.swallow.content_prev";
+				target: "event_blocker";
+				transition: "ACCELERATE" 0.5;
+				after: "hide_end";
+			}
+
+			program {
+				name: "disable_blocker";
+				action: STATE_SET "disabled" 0.0;
+				target: "event_blocker";
+			}
+			program {
+				name: "show_end";
+				action: SIGNAL_EMIT "elm,action,show,finished" "";
+				after: "disable_blocker";
+			}
+			program {
+				name: "hide_end";
+				action: SIGNAL_EMIT "elm,action,hide,finished" "";
+				after: "disable_blocker";
+			}
+
+			program {
+				name: "hide_already";
+				signal: "elm,state,hidealready";
+				after: "hide_already_end";
+			}
+			program {
+				name: "hide_already_end";
+				action: SIGNAL_EMIT "elm,action,hidealready,finished" "";
+			}
+
+			program {
+				name: "hide_only";
+				signal: "elm,state,hideonly";
+				action: STATE_SET "map_transition" 0.0;
+				target: "elm.swallow.content";
+				target: "elm.swallow.content_prev";
+				target: "event_blocker";
+				transition: "ACCELERATE" 0.5;
+				after: "hide_only_end";
+			}
+			program {
+				name: "hide_only_end";
+				action: SIGNAL_EMIT "elm,action,hideonly,finished" "";
+				after: "disable_blocker";
+			}
+
+			program {
+				name: "rotaion_transition";
+				action: STATE_SET "map_transition" 0.0;
+				target: "elm.swallow.content";
+				target: "elm.swallow.content_prev";
+				after: "rotation";
+			}
+			program {
+				name: "rotation";
+				action: STATE_SET "map_rotate" 0.0;
+				transition: LINEAR second;
+				target: "elm.swallow.content";
+				target: "elm.swallow.content_prev";
+				after: "show_end";
+			}
+			program {
+				name: "rotation_end";
+				action: STATE_SET "default" 0.0;
+				target: "elm.swallow.content";
+				target: "elm.swallow.content_prev";
+				after: "show_end";
+			}
+		}
+	}
+}

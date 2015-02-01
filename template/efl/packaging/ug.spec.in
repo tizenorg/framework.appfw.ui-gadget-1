@@ -1,0 +1,41 @@
+
+Name:       ug-@@UGNAME@@
+Summary:    UI Gadget : @@UGNAME@@
+Version:    0.1.0
+Release:    0
+Group:      TO_BE/FILLED_IN
+License:    Samsung
+Source0:    %{name}-%{version}.tar.gz
+
+BuildRequires: cmake
+BuildRequires: edje-tools
+BuildRequires: gettext-tools
+
+BuildRequires: pkgconfig(elementary)
+BuildRequires: pkgconfig(edje)
+BuildRequires: pkgconfig(evas)
+BuildRequires: pkgconfig(ecore)
+BuildRequires: pkgconfig(ui-gadget-1)
+
+%description
+Description: UI Gadget, @@UGNAME@@
+
+%prep
+%setup -q
+
+%build
+
+cmake . -DCMAKE_INSTALL_PREFIX=%{/opt/ug/lib}/
+
+make %{?jobs:-j%jobs}
+
+
+%install
+rm -rf %{buildroot}
+%make_install
+
+%post
+
+%files
+/opt/ug/lib/*
+

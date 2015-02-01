@@ -1,0 +1,144 @@
+#ifndef UG_MODULE_API
+#define UG_MODULE_API __attribute__ ((visibility("default")))
+#endif
+
+#include <Elementary.h>
+#include <ui-gadget-module.h>
+
+#include "@@UGNAME@@.h"
+
+struct ug_data {
+	Evas_Object *base;
+	ui_gadget_h ug;
+};
+
+static Evas_Object *create_fullview(Evas_Object *parent, struct ug_data *ugd)
+{
+	Evas_Object *base;
+
+	/* Create Full view */
+
+	return base;
+}
+
+static Evas_Object *create_frameview(Evas_Object *parent, struct ug_data *ugd)
+{
+	Evas_Object *base;
+
+	/* Create Frame view */
+
+	return base;
+}
+
+static void *on_create(ui_gadget_h ug, service_h service, enum ug_mode mode, void *priv)
+{
+	Evas_Object *parent;
+	struct ug_data *ugd;
+
+	if (!ug || !priv)
+		return NULL;
+
+	ugd = priv;
+	ugd->ug = ug;
+
+	parent = ug_get_parent_layout(ug);
+	if (!parent)
+		return NULL;
+
+	if (mode == UG_MODE_FULLVIEW)
+		ugd->base = create_fullview(parent, ugd);
+	else
+		ugd->base = create_frameview(parent, ugd);
+
+	return ugd->base;
+}
+
+static void on_start(ui_gadget_h ug, service_h service, void *priv)
+{
+}
+
+static void on_pause(ui_gadget_h ug, service_h service, void *priv)
+{
+
+}
+
+static void on_resume(ui_gadget_h ug, service_h service, void *priv)
+{
+
+}
+
+static void on_destroy(ui_gadget_h ug, service_h service, void *priv)
+{
+	struct ug_data *ugd;
+
+	if (!ug || !priv)
+		return;
+
+	ugd = priv;
+	evas_object_del(ugd->base);
+	ugd->base = NULL;
+}
+
+static void on_message(ui_gadget_h ug, service_h msg, service_h service, void *priv)
+{
+}
+
+static void on_event(ui_gadget_h ug, enum ug_event event, service_h service, void *priv)
+{
+	switch (event) {
+	case UG_EVENT_LOW_MEMORY:
+		break;
+	case UG_EVENT_LOW_BATTERY:
+		break;
+	case UG_EVENT_LANG_CHANGE:
+		break;
+	case UG_EVENT_ROTATE_PORTRAIT:
+		break;
+	case UG_EVENT_ROTATE_PORTRAIT_UPSIDEDOWN:
+		break;
+	case UG_EVENT_ROTATE_LANDSCAPE:
+		break;
+	case UG_EVENT_ROTATE_LANDSCAPE_UPSIDEDOWN:
+		break;
+	case UG_EVENT_REGION_CHANGE:
+		break;
+	default:
+		break;
+	}
+}
+
+UG_MODULE_API int UG_MODULE_INIT(struct ug_module_ops *ops)
+{
+	struct ug_data *ugd;
+
+	if (!ops)
+		return -1;
+
+	ugd = calloc(1, sizeof(struct ug_data));
+	if (!ugd)
+		return -1;
+
+	ops->create = on_create;
+	ops->start = on_start;
+	ops->pause = on_pause;
+	ops->resume = on_resume;
+	ops->destroy = on_destroy;
+	ops->message = on_message;
+	ops->event = on_event;
+	ops->priv = ugd;
+	ops->opt = UG_OPT_INDICATOR_PORTRAIT_ONLY;
+
+	return 0;
+}
+
+UG_MODULE_API void UG_MODULE_EXIT(struct ug_module_ops *ops)
+{
+	struct ug_data *ugd;
+
+	if (!ops)
+		return;
+
+	ugd = ops->priv;
+	if (ugd)
+		free(ugd);
+}

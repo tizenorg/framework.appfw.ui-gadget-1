@@ -11,6 +11,7 @@ PKG_CHECK_MODULES(CLIENT_PKGS REQUIRED
 	capi-appfw-application
 	appcore-efl
 	appsvc
+	aul
 	bundle
 	ecore-x
 	edje
@@ -18,7 +19,14 @@ PKG_CHECK_MODULES(CLIENT_PKGS REQUIRED
 	elementary
 	evas
 	x11
-	vconf)
+	vconf
+	pkgmgr-info
+	libprivilege-control
+	dbus-glib-1)
+
+IF(_APPFW_FEATURE_UG_PROCESS_POOL)
+	ADD_DEFINITIONS("-D_APPFW_FEATURE_UG_PROCESS_POOL")
+ENDIF(_APPFW_FEATURE_UG_PROCESS_POOL)
 
 FOREACH(flag ${CLIENT_PKGS_CFLAGS})
 	SET(CLIENT_CFLAGS "${CLIENT_CFLAGS} ${flag}")

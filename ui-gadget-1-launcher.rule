@@ -1,0 +1,8 @@
+ui-gadget::launcher system::homedir rwxat
+ui-gadget::launcher system::vconf rwxat
+ui-gadget::launcher system::media rwxat
+ui-gadget::launcher system::share rwxat
+ui-gadget::launcher pulseaudio rwxat
+ui-gadget::launcher sys-assert::core rwxat
+e17 ui-gadget::launcher w
+

@@ -1,0 +1,11 @@
+com.samsung.helloug app.default include
+com.samsung.helloworld app.default include
+com.samsung.helloworld aul::launch x
+com.samsung.helloug aul::launch x
+com.samsung.helloworld svi-data rx
+com.samsung.helloug svi-data rx
+com.samsung.helloworld xorg rwx
+com.samsung.helloug xorg rwx
+
+
+com.samsung.helloworld com.samsung.twitter rwx

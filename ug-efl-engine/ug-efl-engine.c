@@ -66,8 +66,6 @@ static void _layout_del_cb(void *data, Evas_Object *obj, void *event_info)
 
 	evas_object_event_callback_del(ug->layout, EVAS_CALLBACK_DEL,
 		(Evas_Object_Event_Cb)_layout_del_cb);
-
-	ug->layout_state = UG_LAYOUT_DESTROY;
 	ug->layout = NULL;
 }
 
@@ -89,7 +87,6 @@ static void __del_effect_end(ui_gadget_h ug)
 	}
 
 	ug->layout_state = UG_LAYOUT_DESTROY;
-
 	hide_end_cb(ug);
 }
 
@@ -185,6 +182,21 @@ static void __on_hideonly_cb(void *data, Evas_Object *obj)
 	_DBG("\t obj=%p ug=%p layout_state=%d state=%d", obj, ug, ug->layout_state, ug->state);
 
 	evas_object_intercept_hide_callback_del(ug->layout, __on_hideonly_cb);
+
+	switch(ug->state)
+	{
+		case UG_STATE_READY:
+		case UG_STATE_DESTROYING:
+		case UG_STATE_PENDING_DESTROY:
+		case UG_STATE_DESTROYED:
+		{
+			_DBG("wrong ug state");
+			return;
+		}
+		default:
+			break;
+	}
+
 	evas_object_event_callback_add(ug->layout, EVAS_CALLBACK_SHOW, on_show_cb, ug);
 
 	if (ug->layout_state == UG_LAYOUT_SHOW) {
@@ -196,13 +208,14 @@ static void __on_hideonly_cb(void *data, Evas_Object *obj)
 		return;
 	}
 
-	if ((elm_naviframe_top_item_get(navi) == ug->effect_layout) 
+	if ((elm_naviframe_top_item_get(navi) == ug->effect_layout)
 		&& (ug->layout_state != UG_LAYOUT_NOEFFECT)) {
 		_DBG("\t cb transition add ug=%p", ug);
 		evas_object_smart_callback_add(navi, "transition,finished",
 				__hide_finished, ug);
 		elm_naviframe_item_pop(navi);
 		ug->layout_state = UG_LAYOUT_HIDEEFFECT;
+		ug->effect_layout = NULL;
 	} else {
 		elm_object_item_del(ug->effect_layout);
 		__hide_end(ug);
@@ -247,7 +260,10 @@ static void on_destroy(ui_gadget_h ug, ui_gadget_h t_ug,
 		|| ug->layout_state == UG_LAYOUT_NOEFFECT) {
 		__del_effect_layout(ug, t_ug);
 	} else if (ug->layout_state == UG_LAYOUT_HIDEEFFECT) {
-		;
+		evas_object_smart_callback_del(navi, "transition,finished",
+					__hide_finished);
+		evas_object_smart_callback_add(navi, "transition,finished",
+				__del_finished, ug);
 	} else {
 		_WRN("[UG Effect Plug-in] : layout state(%p) error!!", ug->layout_state);
 		__del_effect_end(ug);
@@ -278,6 +294,14 @@ static void __show_finished(void *data, Evas_Object *obj, void *event_info)
 	return;
 }
 
+static int __show_end_cb_by_job_add(void *data)
+{
+	if(show_end_cb) {
+		show_end_cb(data);
+	}		
+	return 0;
+}
+
 static void on_show_cb(void *data, Evas *e, Evas_Object *obj,
 		       void *event_info)
 {
@@ -292,6 +316,7 @@ static void on_show_cb(void *data, Evas *e, Evas_Object *obj,
 						__on_hideonly_cb, ug);
 
 	//if 'elm.swallow.ug' string is changed, msg team have to apply this changes.
+	evas_object_show(navi);
 	elm_object_part_content_set(conform, "elm.swallow.ug", navi);
 
 	if (ug->layout_state == UG_LAYOUT_HIDEEFFECT
@@ -310,8 +335,7 @@ static void on_show_cb(void *data, Evas *e, Evas_Object *obj,
 		ug->effect_layout = elm_naviframe_item_insert_after(navi,
 				navi_top, NULL, NULL, NULL, ug->layout, NULL);
 		//ug start cb
-		if(show_end_cb)
-			show_end_cb(ug);
+		ecore_job_add((Ecore_Cb)__show_end_cb_by_job_add, (void *)data);
 	} else {
 		_ERR("\tlayout state error!! state=%d\n", ug->layout_state);
 	}
@@ -340,7 +364,6 @@ static void *on_create(void *win, ui_gadget_h ug,
 
 	if (!navi) {
 		navi = elm_naviframe_add(conform);
-		elm_object_focus_allow_set(navi, EINA_FALSE);
 		elm_object_style_set(navi, "uglib");
 		elm_naviframe_content_preserve_on_pop_set(navi, EINA_TRUE);
 		_DBG("\t new navi first navi=%p", navi);
@@ -368,7 +391,9 @@ static void *on_create(void *win, ui_gadget_h ug,
 
 static void *on_request(void *data, ui_gadget_h ug, int req)
 {
-	void *ret;
+	void *ret = NULL;
+	Elm_Object_Item *navi_bottom_item = NULL;
+	Elm_Object_Item *navi_top_item = NULL;
 
 	_DBG("on_request ug(%p) req(%d)", ug, req);
 
@@ -376,6 +401,26 @@ static void *on_request(void *data, ui_gadget_h ug, int req)
 	{
 		case UG_UI_REQ_GET_CONFORMANT :
 			ret = (void *)_get_win_conformant((Evas_Object *)data);
+			break;
+		case UG_UI_REQ_UNSET_CONTENT :
+			{
+				_DBG("unset swallow ug content");
+				if(navi) {
+					navi_bottom_item = elm_naviframe_bottom_item_get(navi);
+					navi_top_item = elm_naviframe_top_item_get(navi);
+
+					while(navi_bottom_item != navi_top_item)
+					{
+						_DBG("navi item : %p", navi_top_item);
+						elm_object_item_del(navi_top_item);
+						navi_top_item = elm_naviframe_top_item_get(navi);
+					}
+
+					_DBG("\t unset navi");
+					elm_object_part_content_unset(conform, "elm.swallow.ug");
+					evas_object_hide(navi);
+				}
+			}
 			break;
 		default :
 			_WRN("wrong req id(%d)", req);

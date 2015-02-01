@@ -1,0 +1,168 @@
+#!/bin/bash
+
+#  UI Gadget
+#
+# Copyright (c) 2000 - 2011 Samsung Electronics Co., Ltd. All rights reserved.
+#
+# Contact: Jayoun Lee <airjany@samsung.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#
+
+DEST=
+FILES=
+TROOT="@@TEMPLATE_DATA_DIR@@"
+
+function usage()
+{
+	SCRIPT=$0
+	echo "Usage) ${SCRIPT##*/} dest lib_name ui[EFL]"
+}
+
+function mk_dir()
+{
+	mkdir -p $1
+	if [ $? -ne 0 ]; then
+		echo "make directory error: $1"
+		exit -1
+	fi
+}
+
+function set_args()
+{
+	echo ""
+
+	DEST=$1
+	UGNAME=$2
+	UILIB="efl"
+	UGNAME_FOR_HEADER=`echo $UGNAME | sed -e 's^-^_^g'`
+
+	if [ "$3" = "EFL" ]; then
+		UILIB="efl"
+	else
+		usage;
+	fi
+
+	if [ ! -d $DEST ] ; then
+		mk_dir $DEST
+	fi
+
+	echo "Destination: $DEST"
+	echo "Library name: $UGNAME"
+	echo "UI Library: $UILIB"
+}
+
+function copy_files()
+{
+	echo ""
+	echo -n "Copy files to $DEST : "
+
+	if [ -d $TROOT ]; then
+		cp -ra $TROOT/$UILIB/* $DEST
+	else
+		cp -ra ../../$TROOT/$UILIB/* $DEST
+	fi
+	if [ $? -ne 0 ]; then
+		echo "Failed"
+		exit -1
+	fi
+	echo "Done"
+}
+
+function subs_file()
+{
+	sed -e	'
+		s^@@UGNAME@@^'"$UGNAME"'^g
+		s^@@UGNAME_FOR_HEADER@@^'"$UGNAME_FOR_HEADER"'^g
+		s^@@UILIB@@^'"$UILIB"'^g
+		' $1 > $2
+	rm $1
+}
+
+function modify_files()
+{
+	pushd . > /dev/null
+	cd $DEST
+
+	FILES=`find . -type f  `
+	for f in $FILES ; do
+		case "$f" in
+			*ug.h.in)
+				echo "header : $f"
+				subs_file $f ./${UGNAME}.h
+			;;
+			*ug.c.in)
+				echo "C : $f"
+				subs_file $f ./${UGNAME}.c
+			;;
+			*CMakeLists.txt.in)
+				echo "ug source CMakeLists.txt : $f"
+				subs_file $f ./CMakeLists.txt
+			;;
+			*CMakeLists_po*.txt.in)
+				echo "po CMakeLists.txt : $f"
+				subs_file $f ./po/CMakeLists.txt
+			;;
+			*POTFILES.in.in)
+				echo "POTFILES.in : $f"
+				subs_file $f ./po/POTFILES.in
+			;;
+			*update-po.sh.in)
+				echo "update-po.sh : $f"
+				subs_file $f ./po/update-po.sh
+				chmod +x ./po/update-po.sh
+			;;
+			*changelog.in)
+				echo "debian changelog : $f"
+				subs_file $f ./debian/changelog
+			;;
+			*control.in)
+				echo "debian control : $f"
+				subs_file $f ./debian/control
+			;;
+			*rules.in)
+				echo "debian rules : $f"
+				subs_file $f ./debian/rules
+				chmod +x ./debian/rules
+			;;
+			*POTFILES.in.in)
+				echo "POTFILES.in : $f"
+				subs_file $f ./po/POTFILES.in
+			;;
+			*ug.install.in)
+				echo "debian install : $f"
+				subs_file $f ./debian/libug-${UGNAME}.install.in
+			;;
+			*ug.spec.in)
+				echo "rpm spec : $f"
+				subs_file $f ./packaging/ug-${UGNAME}.spec
+			;;
+			*)
+				echo "Others : $f"
+			;;
+		esac
+	done
+
+	popd > /dev/null
+}
+
+if [ $# -lt 2 ] ; then
+	usage
+	exit -1
+fi
+
+set_args $*
+copy_files
+modify_files
+

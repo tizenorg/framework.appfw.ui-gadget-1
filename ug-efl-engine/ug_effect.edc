@@ -23,6 +23,7 @@
 #define NAVIFRAME_VIEW_TRANS_TIME 0.1
 
 collections {
+	base_scale: 1.8;
 /*  group { name:"elm/naviframe/item/basic/uglib";
       parts {
          part { name: "base";

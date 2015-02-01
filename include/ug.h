@@ -50,6 +50,7 @@ enum ug_layout_state {
 
 enum ug_ui_req {
 	UG_UI_REQ_GET_CONFORMANT = 0x00,
+	UG_UI_REQ_UNSET_CONTENT = 0x01,
 	UG_UI_REQ_MAX
 };
 
@@ -66,14 +67,11 @@ struct ui_gadget_s {
 	struct ug_module *module;
 	struct ug_cbs cbs;
 
-	service_h service;
+	app_control_h app_control;
 
 	int destroy_me:1;
 	enum ug_layout_state layout_state;
 	void *effect_layout;
 };
-
-ui_gadget_h ug_root_create(void);
-int ug_free(ui_gadget_h ug);
 
 #endif				/* __UG_H__ */
