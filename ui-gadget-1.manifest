@@ -1,0 +1,16 @@
+<manifest>
+	<define>
+		<domain name="ui-gadget"/>
+		<provide>
+			<label name="ui-gadget::client"/>
+			<label name="ui-gadget::launcher"/>
+		</provide>
+	</define>
+	<assign>
+		<filesystem path="/usr/bin/ug-client" label="ui-gadget::client" exec_label="ui-gadget::client"/>
+		<filesystem path="/usr/bin/ug-launcher" label="ui-gadget::launcher" exec_label="ui-gadget::launcher"/>
+	</assign>
+	<request>
+		<domain name="_"/>
+	</request>
+</manifest>

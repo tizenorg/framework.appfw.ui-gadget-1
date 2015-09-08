@@ -23,22 +23,10 @@
 #define __UI_GADGET_ENGINE_H__
 
 /**
- * @defgroup	UI_Gadget_For_Developer Developer API Reference Guide
- * @ingroup	UI_Gadget
- * @brief	A engine to develop a UI gadget. Callees (UI gadgets) uses this engines and APIs. (callee -> caller)
- *
- * @section Header To Use Them:
- * @code
- * #include <ui-gadget-engine.h>
- * @endcode
- */
-
-/**
- * @addtogroup UI_Gadget_For_Developer
+ * @addtogroup CORE_LIB_GROUP_UI_GADGET_ENGINE_MODULE
  * @{
  */
 
-#include <bundle.h>
 #include "ui-gadget.h"
 
 #ifdef __cplusplus
@@ -47,15 +35,16 @@ extern "C" {
 
 /**
  * UI gadget engine operation type
- * @see @ref lifecycle_sec
  */
 struct ug_engine_ops {
 	/** create operation */
-	void *(*create)(void *win, ui_gadget_h ug, void(*hide_end_cb)(ui_gadget_h ug));
+	void *(*create)(void *win, ui_gadget_h ug, void(*show_end_cb)(void *data));
 	/** destroy operation */
-	void (*destroy)(ui_gadget_h ug, ui_gadget_h fv_top);
+	void (*destroy)(ui_gadget_h ug, ui_gadget_h fv_top, void(*hide_end_cb)(void *data));
+	/** request operation */
+	void *(*request)(void *data, ui_gadget_h ug, int req);
 	/** reserved operations */
-	void *reserved[4];
+	void *reserved[3];
 };
 
 #ifdef __cplusplus

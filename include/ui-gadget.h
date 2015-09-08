@@ -22,27 +22,16 @@
 #ifndef __UI_GADGET_H__
 #define __UI_GADGET_H__
 
-/**
- * @file	ui-gadget.h
- * @version	0.1
- * @brief	This file contains the public API of the UI gadget library
- */
+#include <app.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /**
- * @addtogroup APPLICATION_FRAMEWORK
- * @{
- *
- * @defgroup	UI_Gadget UI gadget library
- * @version	0.1
- * @brief	A library to develop/use a UI gadget
- */
-
-/**
- * @addtogroup UI_Gadget
- * @{
- *
- * @defgroup	UI_Gadget_For_User User API Reference Guide
- * @brief	A module to use a UI gadget. Caller uses this module and APIs.
+ * @file ui-gadget.h
+ * @brief This file contains a module to use a UI gadget. Caller uses this module and APIs.
  *
  * @section Header To Use Them:
  * @code
@@ -51,150 +40,171 @@
  */
 
 /**
- * @addtogroup UI_Gadget_For_User
+ * @internal
+ * @addtogroup CORE_LIB_GROUP_UI_GADGET_MODULE
  * @{
  */
 
-#include <X11/Xlib.h>
-#include <app.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /**
- * struct ui_gadget is an opaque type representing a UI gadget
- * @see ug_create(), ug_destroy()
- * @see ug_get_layout(), ug_get_parent_layout(), ug_get_mode()
+ * @brief The structure type for UI gadget handle.
+ *
+ * @since_tizen 2.3
+ *
+ * @see ug_create()
+ * @see ug_destroy()
+ * @see ug_get_layout()
+ * @see ug_get_parent_layout()
+ * @see ug_get_mode()
  */
 typedef struct ui_gadget_s *ui_gadget_h;
 
 /**
- * UI gadget mode
+ * @brief Enumeration for UI gadget mode.
+ *
+ * @since_tizen 2.3
+ *
  * @see ug_create()
  * @see ug_get_mode()
  */
 enum ug_mode {
-	UG_MODE_FULLVIEW, /**< Fullview mode */
-	UG_MODE_FRAMEVIEW, /**< Frameview mode */
-	UG_MODE_INVALID, /**< Invalid mode */
-	UG_MODE_MAX
+    UG_MODE_FULLVIEW,   /**< Fullview mode */
+    UG_MODE_FRAMEVIEW,  /**< Frameview mode */
+    UG_MODE_INVALID,    /**< Invalid mode */
+    UG_MODE_MAX         /**< Max value */
 };
 
 /**
- * UI gadget event
+ * @brief Enumeration for UI gadget event.
+ *
+ * @since_tizen 2.3
+ *
  * @see ug_send_event()
  */
 enum ug_event {
-	UG_EVENT_NONE = 0x00,		/**< No event */
-	UG_EVENT_LOW_MEMORY,		/**< Low memory event */
-	UG_EVENT_LOW_BATTERY,		/**< Low battery event */
-	UG_EVENT_LANG_CHANGE,		/**< Language change event */
-	UG_EVENT_ROTATE_PORTRAIT,	/**< Rotate event: Portrait */
-	UG_EVENT_ROTATE_PORTRAIT_UPSIDEDOWN,	/**< Rotate event: Portrait upsidedown */
-	UG_EVENT_ROTATE_LANDSCAPE,	/**< Rotate event: Landscape */
-	UG_EVENT_ROTATE_LANDSCAPE_UPSIDEDOWN,
-			/**< Rotate event: Landscape upsidedown */
-	UG_EVENT_REGION_CHANGE,		/**< Region change event */
-	UG_EVENT_MAX
+    UG_EVENT_NONE = 0x00,                    /**< No event */
+    UG_EVENT_LOW_MEMORY,                     /**< Low memory event */
+    UG_EVENT_LOW_BATTERY,                    /**< Low battery event */
+    UG_EVENT_LANG_CHANGE,                    /**< Language change event */
+    UG_EVENT_ROTATE_PORTRAIT,                /**< Rotate event: Portrait */
+    UG_EVENT_ROTATE_PORTRAIT_UPSIDEDOWN,     /**< Rotate event: Portrait upsidedown */
+    UG_EVENT_ROTATE_LANDSCAPE,               /**< Rotate event: Landscape */
+    UG_EVENT_ROTATE_LANDSCAPE_UPSIDEDOWN,    /**< Rotate event: Landscape upsidedown */
+    UG_EVENT_REGION_CHANGE,                  /**< Region change event */
+    UG_EVENT_MAX                             /**< Max value */
 };
 
 /**
- * UI gadget key event
+ * @brief Enumeration for UI gadget key event.
+ *
+ * @since_tizen 2.3
+ *
  * @see ug_send_key_event()
  */
 enum ug_key_event {
-	UG_KEY_EVENT_NONE = 0x00,	/**< No event */
-	UG_KEY_EVENT_END,		/**< End key event */
-	UG_KEY_EVENT_MAX
+    UG_KEY_EVENT_NONE = 0x00,   /**< No event */
+    UG_KEY_EVENT_END,           /**< End key event */
+    UG_KEY_EVENT_MAX            /**< Max value */
 };
 
-#define UG_OPT_INDICATOR_MASK (0x03)
-#define UG_OPT_INDICATOR(opt) (opt & UG_OPT_INDICATOR_MASK)
-
 /**
- * UI gadget option
- * - Indicator option: [1, 0] bits
+ * @brief Enumeration for UI gadget option.
+ *
+ * @since_tizen 2.3
  *
  * @see ug_init()
  */
 enum ug_option {
-	UG_OPT_INDICATOR_ENABLE = 0x00,
-			/**< Indicator option:
-			Enable with both portrait and landscape window */
-	UG_OPT_INDICATOR_PORTRAIT_ONLY = 0x01,
-			/**< Indicator option: Enable with portrait window */
-	UG_OPT_INDICATOR_LANDSCAPE_ONLY = 0x02,
-			/**< Indicator option: Enable with landscape window */
-	UG_OPT_INDICATOR_DISABLE = 0x03,
-			/**< Indicator option:
-			Disable with both portrait and landscape view window */
-	UG_OPT_MAX
+    UG_OPT_INDICATOR_ENABLE = 0x00,
+            /**< Indicator option:
+            Enable with both portrait and landscape window */
+    UG_OPT_INDICATOR_PORTRAIT_ONLY = 0x01,
+            /**< Indicator option: Enable with portrait window */
+    UG_OPT_INDICATOR_LANDSCAPE_ONLY = 0x02,
+            /**< Indicator option: Enable with landscape window */
+    UG_OPT_INDICATOR_DISABLE = 0x03,
+            /**< Indicator option:
+            Disable with both portrait and landscape view window */
+    UG_OPT_INDICATOR_MANUAL = 0x04,
+            /**< Indicator option:
+            Indicator will be handled manually */
+    UG_OPT_MAX    /**< Max value */
 };
 
 /**
- * UI gadget callback type
+ * @brief Definition for key string for the extra data of app_control that is used for result state of ui-gadget. 
+ *        When ug callee (UI gadgets) sends result state using ug_send_result_full(), the ug caller can get the 
+ *        result state from ug callee in result parameter of the result_cb().
+ *
+ * @since_tizen 2.3
+ */
+#define UG_APP_CONTROL_DATA_RESULT "__UG_SEND_RESULT__"
+
+
+
+/**
+ * @brief The Structure type for UI gadget callback type.
+ *
+ * @since_tizen 2.3
+ *
  * @see ug_create()
  */
 struct ug_cbs {
-	/** layout callback */
-	void (*layout_cb) (ui_gadget_h ug, enum ug_mode mode,
-				void *priv);
-	/** result callback */
-	void (*result_cb) (ui_gadget_h ug, service_h result, void *priv);
-	/** destroy callback */
-	void (*destroy_cb) (ui_gadget_h ug, void *priv);
-	/** private data */
-	void *priv;
+    void (*layout_cb) (ui_gadget_h ug, enum ug_mode mode,
+                void *priv);
+    /**< Layout callback */
+    void (*result_cb) (ui_gadget_h ug, app_control_h result, void *priv);
+    /**< Result callback */
+    void (*destroy_cb) (ui_gadget_h ug, void *priv);
+    /**< Destroy callback */
+    void (*end_cb) (ui_gadget_h ug, void *priv);
+    /**< End callback */
+    void *priv;
+    /**< Private data */
+    void *reserved[3];
+    /**< Reserved operations */
 };
 
 /**
- * Easy-to-use macro of ug_init() for EFL
+ * @brief Definition for easy-to-use api of ug_init() for EFL.
+ *
+ * @since_tizen 2.3
+ *
  * @see ug_init()
  */
-#define UG_INIT_EFL(win, opt) \
-	ug_init((Display *)ecore_x_display_get(), elm_win_xwindow_get(win), \
-		win, opt)
+int UG_INIT_EFL(void *win, enum ug_option opt);
 
 /**
- * Easy-to-use macro of ug_init() for GTK
- * @see ug_init()
- */
-#define UG_INIT_GTK(win, opt) \
-	win ?  ug_init(gdk_display_get_default(), win, \
-	GDK_WINDOW_XWINDOW(GTK_WIDGET(win)->window), win, opt) : -1
-
-/**
- * \par Description:
- * This function initializes default window, display, xwindow id, and indicator state.
+ * @brief Initializes default window, display, xwindow ID and indicator state.
  *
- * \par Purpose:
- * First of all, to use UI gadgets in an application, default window to draw the UI gadgets has to be registered. Besides, to change indicator state for the full-view UI gadget, display and xwindow id have to be registered, and to restore application's indicator state, default indicator option has to be registered. This function is used for registering them.
+ * @details @b Purpose: First of all, to use UI gadgets in an application, the default window to draw the 
+ *          UI gadgets on has to be registered. Besides, to change the indicator state for the full-view UI 
+ *          gadget, display and xwindow ID have to be registered, and to restore the application's indicator 
+ *          state, default indicator option has to be registered. This function is used for registering them.
  *
- * \par Typical use case:
- * Application developers who want to use UI gadget MUST register display, xwindow id, default window, and option with the function at first.
+ * @details @b Typical @b use @b case: Application developers who want to use UI gadget MUST register display, 
+ *          xwindow ID, default window, and option with the function at first.
  *
- * \par Method of function operation:
- * Register display, xwindow id, default window, and option.
+ * @details @b Method @b of @b function @b operation: Register display, xwindow ID, default window, and option.
  *
- * \par Context of function:
- * None
+ * @details @b Context @b of @b function: None
  *
- * \note If you are unfamiliar with display and xwindow id, please use following macros: UG_INIT_EFL, UG_INIT_GTK. The macros kindly generate proper functions to get display and xwindow id.
+ * @since_tizen 2.3
  *
- * @param[in] disp Default display
- * @param[in] xid Default xwindow id of default window
- * @param[in] win Default window object, it is void pointer for supporting both GTK (GtkWidget *) and EFL (Evas_Object *)
- * @param[in] opt Default indicator state to restore application's indicator state
- * @return 0 on success, -1 on error
+ * @remarks If you are unfamiliar with display and xwindow ID, please use following api: UG_INIT_EFL. 
+ *          The macros kindly generate proper functions to get display and xwindow ID.
  *
- * \pre None
- * \post None
- * \see UG_INIT_EFL(), UG_INIT_GTK()
- * \remarks None
+ * @param[in] disp  The default display
+ * @param[in] xid   The default xwindow ID of default window
+ * @param[in] win   The Default window object, it is void pointer for supporting both GTK (GtkWidget *) and EFL (Evas_Object *)
+ * @param[in] opt   The Default indicator state to restore application's indicator state
  *
- * \par Sample code:
- * \code
+ * @return  @c 0 on success, 
+ *          otherwise @c -1 on error
+ *
+ * @see UG_INIT_EFL()
+ *
+ * @par Sample code:
+ * @code
  * #include <ui-gadget.h>
  * ...
  * Evas_Object *win;
@@ -202,45 +212,54 @@ struct ug_cbs {
  * // create window
  * ...
  * ug_init((Display *)ecore_x_display_get(), elm_win_xwindow_get(win), win, UG_OPT_INDICATOR_ENABLE);
- * // for convenience you can use following macro: ELM_INIT_EFL(win, UG_OPT_INDICATOR_ENABLE);
+ * // for convenience you can use following macro: UG_INIT_EFL(win, UG_OPT_INDICATOR_ENABLE);
  * ...
- * \endcode
+ * @endcode
  */
-int ug_init(Display *disp, Window xid, void *win, enum ug_option opt);
+int ug_init(void *disp, unsigned long xid, void *win, enum ug_option opt);
 
 /**
- * \par Description:
- * This function creates a UI gadget
+ * @brief Creates a UI gadget.
  *
- * \par Purpose:
- * This function is used for creating a UI gadget instance. In addition, following callbacks could be registered with the function: layout callback, result callback, and destroy callback. (see struct ug_cbs)
+ * @details @b Purpose: This function is used to create a UI gadget instance. In addition, the following 
+ *          callbacks can be registered with the function: layout callback, result callback, and destroy callback. (See struct ug_cbs)
  *
- * \par Typical use case:
- * Anyone who want to create UI gadget could use the function.
+ * @details @b Typical @b use @b case: Anyone who wants to create a UI gadget can use this function.
  *
- * \par Method of function operation:
- * First, the UI gadget with given name is dynamically loaded(dlopen). Next, state operations of loaded UI gadget are invoked according to its lifecycle. There are three callbacks which could be registered with the function: layout callback, result callback, and destroy callback. If the state is changed to "Create", the layout callback is invoked for layout arrangement. If ug_send_result() is invoked in the loaded UI gadget , the result callback is invoked. And, if ug_destroy_me() is invoked in the loaded UI gadget , the destroy callback is invoked.
+ * @details @b Method @b of @b function @b operation: First, the UI gadget with the given name is dynamically loaded(dlopen). 
+ *          Next, state operations of loaded UI gadget are invoked according to its lifecycle. There are three callbacks 
+ *          which can be registered with the function: layout callback, result callback, and destroy callback. If the state 
+ *          is changed to "Create", the layout callback is invoked for layout arrangement. If ug_send_result() is invoked 
+ *          in the loaded UI gadget, the result callback is invoked. If ug_destroy_me() is invoked in the loaded UI gadget, 
+ *          the destroy callback is invoked.
  *
- * \par Context of function:
- * This function supposed to be called after successful initialization with ug_init()
+ * @details @b Context @b of @b function: This function should be called after successful initialization by ug_init().
  *
- * @param[in] parent parent's UI gadget. If the UI gadget uses the function, the parent has to be the UI gadget. Otherwise, if an application uses the function, the parent has to be NULL
- * @param[in] name name of UI gadget
- * @param[in] mode mode of UI gadget (UG_MODE_FULLVIEW | UG_MODE_FRAMEVIEW)
- * @param[in] service argument for the UI gadget  (see \ref service_PG "Tizen managed api reference guide")
- * @param[in] cbs callback functions (layout callback, result callback, destroy callback, see struct ug_cbs) and private data.
- * @return The pointer of UI gadget, NULL on error
+ * @since_tizen 2.3
  *
- * \pre ug_init()
- * \post None
- * \see struct ug_cbs, enum ug_mode
- * \remarks If you passed "service", you MUST release it using service_destroy() after ug_create()
+ * @remarks If "app_control" is passed, app_control_destroy() should be released after ug_create().
  *
- * \par Sample code:
- * \code
+ * @param[in] parent       The parent's UI gadget \n
+ *                         If the UI gadget uses the function, the parent has to be the UI gadget \n
+ *                         Otherwise, if an application uses the function, the parent has to be @c NULL.
+ * @param[in] name         The name of the UI gadget
+ * @param[in] mode         The mode of the UI gadget (UG_MODE_FULLVIEW | UG_MODE_FRAMEVIEW)
+ * @param[in] app_control  The argument for the UI gadget (see @ref app_control_PG "Tizen managed api reference guide")
+ *
+ * @return  The pointer of UI gadget, 
+ *          otherwise @c NULL on error
+ *
+ * @pre ug_init() should be called.
+ *
+ * @see struct ug_cbs
+ * @see ug_mode
+ *
+ *
+ * @par Sample code:
+ * @code
  * #include <ui-gadget.h>
  * ...
- * service_h service;
+ * app_control_h app_control;
  * ui_gadget_h ug;
  * struct ug_cbs cbs = {0, };
  *
@@ -251,441 +270,452 @@ int ug_init(Display *disp, Window xid, void *win, enum ug_option opt);
  * cbs.priv = user_data;
  *
  * // create arguments
- * service_create(&service);
- * service_add_extra_data(service, "Content", "Hello");
+ * app_control_create(&app_control);
+ * app_control_add_extra_data(app_control, "Content", "Hello");
  *
  * // create "helloUG-efl" UI gadget instance
- * ug = ug_create(NULL, "helloUG-efl", UG_MODE_FULLVIEW, service, &cbs);
+ * ug = ug_create(NULL, "helloUG-efl", UG_MODE_FULLVIEW, app_control, &cbs);
  *
  * // release arguments
- * service_destroy(b);
+ * app_control_destroy(bontext @b of @b function:
+
  * ...
- * \endcode
+ * @endcode
  */
 ui_gadget_h ug_create(ui_gadget_h parent, const char *name,
-					enum ug_mode mode, service_h service,
-					struct ug_cbs *cbs);
+                    enum ug_mode mode, app_control_h app_control,
+                    struct ug_cbs *cbs);
 
 /**
- * \par Description:
- * This function pauses all UI gadgets
+ * @brief Pauses all UI gadgets.
  *
- * \par Purpose:
- * This function is used for pausing UI gadgets with "Running" state. Eventually, state of the UI gadgets would be "Stopped."
+ * @details @b Purpose: This function is used to pause UI gadgets in the "Running" state. Eventually, the state of the UI gadgets will be "Stopped".
  *
- * \par Typical use case:
- * Application developers who want to pause loaded UI gadgets could use the function.
+ * @details @b Typical @b use @b case: Application developers who want to pause loaded UI gadgets can use this function.
  *
- * \par Method of function operation:
- * "Pause" state operations of UI gadgets with "Running" state in the UI gadget tree are invoked by post-order traversal.
+ * @details @b Method @b of @b function @b operation: "Pause" state operations of UI gadgets with the "Running" state in the 
+ *          UI gadget tree are invoked by post-order traversal.
  *
- * \par Context of function:
- * This function supposed to be called after successful initialization with ug_init()
+ *          @b Context @b of @b function: This function is supposed to be called after successful initialization with ug_init().
  *
- * @return 0 on success, -1 on error
+ * @since_tizen 2.3
  *
- * \pre ug_init()
- * \post None
- * \see ug_resume()
- * \remarks None
+ * @return  @c 0 on success, 
+ *          otherwise @c -1 on error
  *
- * \par Sample code:
- * \code
+ * @pre ug_init() should be called.
+ *
+ * @see ug_resume()
+ *
+ * @par Sample code:
+ * @code
  * #include <ui-gadget.h>
  * ...
  * // pause all UI gadget instances
  * ug_pause();
  * ...
- * \endcode
+ * @endcode
  */
 int ug_pause(void);
 
 /**
- * \par Description:
- * This function resumes all UI gadgets
+ * @brief Resumes all UI gadgets.
  *
- * \par Purpose:
- * This function is used for resuming UI gadgets with "Stopped" state. Eventually, state of all UI gadgets would be "Running."
+ * @details @b Purpose: This function is used for resuming UI gadgets in the "Stopped" state. Eventually, the state of all UI gadgets will be "Running".
  *
- * \par Typical use case:
- * Application developers who want to resume loaded UI gadgets could use the function.
+ * @details @b Typical @b use @b case: Application developers who want to resume loaded UI gadgets can use this function.
  *
- * \par Method of function operation:
- * "Resume" state operations of UI gadgets with "Stopped" state in the UI gadget tree are invoked by post-order traversal.
+ * @details @b Method @b of @b function @b operation: "Resume" state operations of UI gadgets with the "Stopped" state in the UI gadget tree are invoked by post-order traversal.
  *
- * \par Context of function:
- * This function supposed to be called after successful initialization with ug_init()
+ * @details @b Context @b of @b function: This function should be called after successful initialization by ug_init().
  *
- * @return 0 on success, -1 on error
+ * @since_tizen 2.3
  *
- * \pre ug_init()
- * \post None
- * \see ug_pause()
- * \remarks None
+ * @return  @c 0 on success, 
+ *          otherwise @c -1 on error
  *
- * \par Sample code:
- * \code
+ * @pre ug_init() should be called.
+ *
+ * @see ug_pause()
+ *
+ * @par Sample code:
+ * @code
  * #include <ui-gadget.h>
  * ...
  * // resume all UI gadget instances
  * ug_resume();
  * ...
- * \endcode
+ * @endcode
  */
 int ug_resume(void);
 
 /**
- * \par Description:
- * This function destroys the given UI gadget instance
+ * @brief Destroys the given UI gadget instance.
  *
- * \par Purpose:
- * This function is used for destroying given UI gadget instance and its children. Eventually, state of the instance would be "Destroyed."
+ * @details @b Purpose: This function is used for destroying the given UI gadget instance and its children. Eventually, the state of the instance will be "Destroyed".
  *
- * \par Typical use case:
- * Anyone who want to destroy specific UI gadget could use the function.
+ * @details @b Typical @b use @b case: Anyone who want to destroy specific UI gadget can use this function.
  *
- * \par Method of function operation:
- * "Destroy" state operations of the given UI gadget instance and its children are invoked.
+ * @details @b Method @b of @b function @b operation: "Destroy" state operations of the given UI gadget instance and its children are invoked.
  *
- * \par Context of function:
- * This function supposed to be called after successful initialization with ug_init() and creation UI gadget with ug_create()
+ * @details @b Context @b of @b function: This function is supposed to be called after successful initialization of ug_init() and creation of ug_create().
+ *
+ * @since_tizen 2.3
  *
  * @param[in] ug The UI gadget
- * @return 0 on success, -1 on error
  *
- * \pre ug_init(), ug_create()
- * \post None
- * \see ug_destroy_all()
- * \remarks None
+ * @return  @c 0 on success, 
+ *          otherwise @c -1 on error
  *
- * \par Sample code:
- * \code
+ * @pre ug_init() should be called \n
+ *      ug_create() should be used to create the @a ug gadget.
+ *
+ * @see ug_destroy_all()
+ *
+ * @par Sample code:
+ * @code
  * #include <ui-gadget.h>
  * ...
  * // destroy UI gadget instance
  * ug_destroy(ug);
  * ...
- * \endcode
+ * @endcode
  */
 int ug_destroy(ui_gadget_h ug);
 
 /**
- * \par Description:
- * This function destroys all UI gadgets of an application
+ * @brief Destroys all UI gadgets of an application.
  *
- * \par Purpose:
- * This function is used for destroying all UI gadgets. Eventually, state of all UI gadgets would be "Destroyed."
+ * @details @b Purpose: This function is used for destroying all UI gadgets. Eventually, the state of all UI gadgets will be "Destroyed".
  *
- * \par Typical use case:
- * Application developers who want to destroy loaded UI gadgets could use the function.
+ * @b Typical @b use @b case: Application developers who want to destroy loaded UI gadgets can use this function.
  *
- * \par Method of function operation:
- * "Destroy" state operations of all UI gadgets in the UI gadget tree are invoked by post-order traversal.
+ * @details @b Method @b of @b function @b operation: "Destroy" state operations of all UI gadgets in the UI gadget tree are invoked by post-order traversal.
  *
- * \par Context of function:
- * This function supposed to be called after successful initialization with ug_init()
+ * @details @b Context @b of @b function: This function should be called after successful initialization of ug_init().
  *
- * @return 0 on success, -1 on error
+ * @since_tizen 2.3
  *
- * \pre ug_init()
- * \post None
- * \see ug_destroy()
- * \remarks None
+ * @return  @c 0 on success, 
+ *          otherwise @c -1 on error
  *
- * \par Sample code:
- * \code
+ * @pre ug_init() should be called.
+ *
+ * @see ug_destroy()
+ *
+ * @par Sample code:
+ * @code
  * #include <ui-gadget.h>
  * ...
  * // destroy all UI gadget instances
  * ug_destroy_all();
  * ...
- * \endcode
+ * @endcode
  */
 int ug_destroy_all(void);
 
 /**
- * \par Description:
- * This function gets base layout of the given UI gadget instance
+ * @brief Gets the base layout of the given UI gadget instance.
  *
- * \par Purpose:
- * This function is used for getting base layout pointer of given UI gadget instance.
+ * @details @b Purpose: This function is used to get the base layout pointer of the given UI gadget instance.
  *
- * \par Typical use case:
- * Anyone who want to get base layout of UI gadget could use the function.
+ * @details @b Typical @b use @b case: Anyone who wants to get the base layout of a UI gadget can use this function.
  *
- * \par Method of function operation:
- * This function returns base layout pointer which is created in "Create" operation of the given UI gadget instance.
+ * @details @b Method @b of @b function @b operation: This function returns the base layout pointer which is created in the "Create" operation of the given UI gadget instance.
  *
- * \par Context of function:
- * This function supposed to be called after successful initialization with ug_init() and creation UI gadget with ug_create()
+ * @details @b Context @b of @b function: This function should be called after successful initialization of ug_init() and creation of ug_create().
+ *
+ * @since_tizen 2.3
  *
  * @param[in] ug The UI gadget
- * @return The pointer of base layout, NULL on error. The result value is void pointer for supporting both GTK (GtkWidget *) and EFL (Evas_Object *)
  *
- * \pre ug_init(), ug_create()
- * \post None
- * \see ug_get_parent_layout()
- * \remarks None
+ * @return  The pointer of the base layout, 
+ *          otherwise @c NULL on error \n
+ *          The result value is a void pointer that supports both GTK (GtkWidget *) and EFL (Evas_Object *).
  *
- * \par Sample code:
- * \code
+ * @pre ug_init() should be called. \n
+ *      ug_create() should be used to create the @a ug gadget.
+ *
+ * @see ug_get_parent_layout()
+ *
+ * @par Sample code:
+ * @code
  * #include <ui-gadget.h>
  * ...
  * Evas_Object *ly;
  * // get a base layout
  * ly = (Evas_Object *)ug_get_layout(ug);
  * ...
- * \endcode
+ * @endcode
  */
 void *ug_get_layout(ui_gadget_h ug);
 
 /**
- * \par Description:
- * This function gets base layout of parent of the given UI gadget instance
+ * @brief Gets the base layout of the parent of the given UI gadget instance.
  *
- * \par Purpose:
- * This function is used for getting base layout pointer of parent of the given UI gadget instance.
+ * @details @b Purpose: This function is used to get the base layout pointer of the parent of the given UI gadget instance.
  *
- * \par Typical use case:
- * Anyone who want to get base layout of UI gadget's parent could use the function.
+ * @details @b Typical @b use @b case: Anyone who wants to get the base layout of a UI gadget's parent can use this function.
  *
- * \par Method of function operation:
- * This function returns base layout pointer which is created in "Create" operation of parent of the given UI gadget instance.
+ * @details @b Method @b of @b function @b operation: This function returns the base layout pointer which is created in "Create" operation of parent of the given UI gadget instance.
  *
- * \par Context of function:
- * This function supposed to be called after successful initialization with ug_init() and creation UI gadget with ug_create()
+ * @details @b Context @b of @b function: This function is supposed to be called after successful initialization of ug_init() and creation of ug_create().
+ *
+ * @since_tizen 2.3
  *
  * @param[in] ug The UI gadget
- * @return The pointer of base layout, NULL on error. The result value is void pointer for supporting both GTK (GtkWidget *) and EFL (Evas_Object *)
  *
- * \pre ug_init(), ug_create()
- * \post None
- * \see ug_get_layout()
- * \remarks None
+ * @return  The pointer of the base layout, 
+ *          otherwise @c NULL on error \n
+            The result value is a void pointer that supports both GTK (GtkWidget *) and EFL (Evas_Object *).
  *
- * \par Sample code:
- * \code
+ * @pre ug_init() should be called. \n
+ *      ug_create() should be used to create the @a ug gadget.
+ *
+ * @see ug_get_layout()
+ *
+ * @par Sample code:
+ * @code
  * #include <ui-gadget.h>
  * ...
  * Evas_Object *ly;
  * // get a base layout of parent of the given UI gadget instance
  * ly = (Evas_Object *)ug_get_parent_layout(ug);
  * ...
- * \endcode
+ * @endcode
  */
 void *ug_get_parent_layout(ui_gadget_h ug);
 
 /**
- * \par Description:
- * This function gets default window
+ * @brief Gets a default window.
  *
- * \par Purpose:
- * This function is used for getting default window which is registered with ug_init()
+ * @details @b Purpose: This function is used to get the default window which is registered with ug_init().
  *
- * \par Typical use case:
- * Anyone who want to get default window could use the function.
+ * @details @b Typical @b use @b case: Anyone who want to get the default window can use this function.
  *
- * \par Method of function operation:
- * This function returns default window pointer which is registered with ug_init()
+ * @details @b Method @b of @b function @b operation: This function returns the default window pointer which is registered with ug_init().
  *
- * \par Context of function:
- * This function supposed to be called after successful initialization with ug_init()
+ * @details @b Context @b of @b function: This function should be called after successful initialization of ug_init().
  *
- * @return The pointer of default window, NULL on error. The result value is void pointer for supporting both GTK (GtkWidget *) and EFL (Evas_Object *)
+ * @since_tizen 2.3
  *
- * \pre ug_init()
- * \post None
- * \see None
- * \remarks None
+ * @return  The pointer of a default window, 
+ *          otherwise @c NULL on error \n
+ *           The result value is void pointer that supports both GTK (GtkWidget *) and EFL (Evas_Object *).
  *
- * \par Sample code:
- * \code
+ * @pre ug_init() should be called.
+ *
+ * @par Sample code:
+ * @code
  * #include <ui-gadget.h>
  * ...
  * Evas_Object *win;
  * // get default window
- * win = (Evas_Object *)ug_get_window(ug);
+ * win = (Evas_Object *)ug_get_window();
  * ...
- * \endcode
+ * @endcode
  */
 void *ug_get_window(void);
 
 /**
- * \par Description:
- * This function gets mode of the given UI gadget instance
+ * @brief Gets the ug conformant.
  *
- * \par Purpose:
- * This function is used for getting mode of the given UI gadget instance. Mode could be UG_MODE_FULLVIEW or UG_MODE_FRAMEVIEW.
+ * @details @b Purpose: This function is used for getting the ug conformant.
  *
- * \par Typical use case:
- * Anyone who want to get mode of UI gadget could use the function.
+ * @details @b Typical @b use @b case: Anyone who wants to get the ug conformant can use this function.
  *
- * \par Method of function operation:
- * This function returns mode which is registered with ug_create()
+ * @details @b Method @b of @b function @b operation: This function returns the ug conformant pointer.
  *
- * \par Context of function:
- * This function supposed to be called after successful initialization with ug_init() and creation UI gadget with ug_create()
+ * @details @b Context @b of @b function: This function is supposed to be called after successful initialization with ug_init().
+ *
+ * @since_tizen 2.3
+ *
+ * @return  The pointer of the default window, 
+ *          otherwise @c NULL on error \n
+ *          The result value is a void pointer for supporting both GTK (GtkWidget *) and EFL (Evas_Object *).
+ *
+ * @pre ug_init() should be called.
+ *
+ * @par Sample code:
+ * @code
+ * #include <ui-gadget.h>
+ * ...
+ * Evas_Object *conform;
+ * // get default window
+ * conform = (Evas_Object *)ug_get_conformant();
+ * ...
+ * @endcode
+ */
+void *ug_get_conformant(void);
+
+/**
+ * @brief Gets the mode of the given UI gadget instance.
+ *
+ * @details @b Purpose: This function is used to get the mode of the given UI gadget instance. The Mode can be UG_MODE_FULLVIEW or UG_MODE_FRAMEVIEW.
+ *
+ * @details @b Typical @b use @b case: Anyone who wants to get the mode of a UI gadget can use this function.
+ *
+ * @details @b Method @b of @b function @b operation: This function returns the mode which is registered with ug_create().
+ *
+ * @details @b Context @b of @b function: This function is supposed to be called after successful initialization of ug_init() and creation of ug_create().
+ *
+ * @since_tizen 2.3
  *
  * @param[in] ug The UI gadget
- * @return UI gadget mode of the given UI gadget instance (UG_MODE_FULLVIEW | UG_MODE_FRAMEVIEW)
  *
- * \pre ug_init(), ug_create()
- * \post None
- * \see enum ug_mode
- * \remarks None
+ * @return  The UI gadget mode of the given UI gadget instance (UG_MODE_FULLVIEW | UG_MODE_FRAMEVIEW)
  *
- * \par Sample code:
- * \code
+ * @pre ug_init() should be called, \n
+ *      ug_create() should be used to create the @a ug gadget.
+ *
+ * @see enum ug_mode
+ *
+ * @par Sample code:
+ * @code
  * #include <ui-gadget.h>
  * ...
  * enum ug_mode mode;
  * // get mode (UG_MODE_FULLVIEW | UG_MODE_FRAMEVIEW)
  * mode = ug_get_mode(ug);
  * ...
- * \endcode
+ * @endcode
  */
 enum ug_mode ug_get_mode(ui_gadget_h ug);
 
 /**
- * \par Description:
- * This function propagates the given system event to all UI gadgets
+ * @brief Propagates the given system event to all UI gadgets.
  *
- * \par Purpose:
- * This function is used for propagating the given system event. Available system events are low memory, low battery, language changed, and window rotate event.
+ * @details @b Purpose: This function is used to propagate the given system event. Available system events are low memory, low battery, language changed and window rotate event.
  *
- * \par Typical use case:
- * Application developers who want to propagate system event to all UI gadgets could use the function.
+ * @details @b Typical @b use @b case: Application developers who want to propagate system event to all UI gadgets can use this function.
  *
- * \par Method of function operation:
- * Event operations of all UI gadgets in the UI gadget tree are invoked by post-order traversal.
+ * @details @b Method @b of @b function @b operation: Event operations of all UI gadgets in the UI gadget tree are invoked by post-order traversal.
  *
- * \par Context of function:
- * This function supposed to be called after successful initialization with ug_init()
+ * @details @b Context @b of @b function: This function is supposed to be called after successful initialization with ug_init().
  *
- * @param[in] event UI gadget event. (see enum ug_event)
- * @return 0 on success, -1 on error
+ * @since_tizen 2.3
  *
- * \pre ug_init()
- * \post None
- * \see enum ug_event
- * \remarks None
+ * @param[in]  The event UI gadget event (see enum ug_event)
  *
- * \par Sample code:
- * \code
+ * @return  @c 0 on success, 
+ *          otherwise @c -1 on error
+ *
+ * @pre ug_init() should be called.
+ *
+ * @see enum ug_event
+ *
+ * @par Sample code:
+ * @code
  * #include <ui-gadget.h>
  * ...
  * // propagate low battery event to all UI gadget instances
  * ug_send_event(UG_EVENT_LOW_BATTERY);
  * ...
- * \endcode
+ * @endcode
  */
 int ug_send_event(enum ug_event event);
 
 /**
- * \par Description:
- * This function send key event to full view top UI gadget
+ * @brief Sends key event to full view top UI gadget.
  *
- * \par Purpose:
- * This function is used for sending key event to full view top UI gadget. Available key events are end event.
+ * @details @b Purpose: This function is used to send a key event to the full view top UI gadget. Available key events are end events.
  *
- * \par Typical use case:
- * Application developers who want to send key event to full view top UI gadget could use the function.
+ * @details @b Typical @b use @b case: Application developers who want to send key event to full view top UI gadget can use this function.
  *
- * \par Method of function operation:
- * Key event operation of full view top UI gadget in the UI gadget tree are invoked.
+ * @details @b Method @b of @b function @b operation: Key event operation of full view top UI gadget in the UI gadget tree are invoked.
  *
- * \par Context of function:
- * This function supposed to be called after successful initialization with ug_init()
+ * @details @b Context @b of @b function: This function is supposed to be called after successful initialization with ug_init().
  *
- * @param[in] event UI gadget key event. (see enum ug_key_event)
- * @return 0 on success, -1 on error
+ * @since_tizen 2.3
  *
- * \pre ug_init()
- * \post None
- * \see enum ug_key_event
- * \remarks None
+ * @param[in] event The UI gadget key event (see enum ug_key_event)
  *
- * \par Sample code:
- * \code
+ * @return  @c 0 on success, 
+ *          otherwise @c -1 on error
+ *
+ * @pre ug_init() should be called.
+ *
+ * @see enum ug_key_event
+ *
+ * @par Sample code:
+ * @code
  * #include <ui-gadget.h>
  * ...
  * // send key event callback to full view top UI gadget instances
  * ug_send_key_event(UG_KEY_EVENT_END);
  * ...
- * \endcode
+ * @endcode
  */
 int ug_send_key_event(enum ug_key_event event);
 
 /**
- * \par Description:
- * This function sends message to the given UI gadget instance
+ * @brief Sends a message to the given UI gadget instance.
  *
- * \par Purpose:
- * This function is used for sending message to created UI gadget. The message have to be composed with service handle.
+ * @details @b Purpose: This function is used for sending a message to a created UI gadget. The message has to be composed with app_control handle.
  *
- * \par Typical use case:
- * Anyone who want to send message to created UI gadget.
+ * @details @b Typical @b use @b case: Anyone who wants to send a message to a created UI gadget.
  *
- * \par Method of function operation:
- * Message operation of given UI gadget instance is invoked.
+ * @details @b Method @b of @b function @b operation: Message operation of the given UI gadget instance is invoked.
  *
- * \par Context of function:
- * This function supposed to be called after successful initialization with ug_init() and creation UI gadget with ug_create()
+ * @details @b Context @b of @b function: This function is supposed to be called after successful initialization with ug_init() and creation UI gadget with ug_create().
  *
- * @param[in] ug The UI gadget
- * @param[in] msg message to send, which is service type (see \ref service_PG "Tizen managed api reference guide")
- * @return 0 on success, -1 on error
+ * @since_tizen 2.3
  *
- * \pre ug_init(), ug_create()
- * \post None
- * \see None
- * \remarks After send your message, you have to release it using service_destroy()
+ * @remarks After message is sent, app_control_destroy() should be released.
  *
- * \par Sample code:
- * \code
+ * @param[in] ug   The UI gadget
+ * @param[in] msg  The Message to send, which is app_control type (see @ref app_control_PG "Tizen managed api reference guide")
+ *
+ * @return  @c 0 on success, 
+ *          otherwise @c -1 on error
+ *
+ * @pre ug_init() should be called. \n
+ *      ug_create() should be used to create the @a ug gadget.
+ *
+ * @par Sample code:
+ * @code
  * #include <ui-gadget.h>
  * ...
- * // make a message with service
- * service_h msg;
- * service_create(&msg)
- * service_add_extra_data(msg, "Content", "Hello");
+ * // make a message with app_control
+ * app_control_h msg;
+ * app_control_create(&msg)
+ * app_control_add_extra_data(msg, "Content", "Hello");
  *
  * // send the message
  * ug_send_message(ug, msg);
  *
  * // release the message
- * service_destroy(msg);
+ * app_control_destroy(msg);
  * ...
- * \endcode
+ * @endcode
  */
-int ug_send_message(ui_gadget_h ug, service_h msg);
+int ug_send_message(ui_gadget_h ug, app_control_h msg);
 
 /**
- * \par Description:
- * This function disable transition effect of the given UI gadget instance
+ * @brief Disables the transition effect of the given UI gadget instance.
  *
- * \par Purpose:
- * This function is used for disabling transition effect of created UI gadget.
+ * @details @b Purpose: This function is used for disabling the transition effect of a created UI gadget.
  *
- * \par Typical use case:
- * Anyone who want to disable transition effect of created UI gadget.
+ * @details @b Typical @b use @b case: Anyone who wants to disable the transition effect of a created UI gadget.
  *
- * \par Method of function operation:
- * No transition effect of given UI gadget is invoked
+ * @details @b Method @b of @b function @b operation: No transition effect of the given UI gadget is invoked.
  *
- * \par Context of function:
- * This function supposed to be called after successful initialization with ug_init() and creation UI gadget with ug_create()
+ * @details @b Context @b of @b function: This function should be called after successful initialization of ug_init() and creation of ug_create().
+ *
+ * @since_tizen 2.3
+ *
+ * @remarks Before showing layout of given UI gadget, ug_disable_effect() should be called.
  *
  * @param[in] ug The UI gadget
- * @return 0 on success, -1 on error
  *
- * \pre ug_init(), ug_create()
- * \post None
- * \see None
- * \remarks Before show layout of given UI gadget, ug_disable_effect() should be called.
+ * @return  @c 0 on success, 
+ *          otherwise @c -1 on error
  *
- * \par Sample code:
- * \code
+ * @pre ug_init() should be called. \n
+ *      ug_create() should be used to create the @a ug gadget.
+ *
+ * @par Sample code:
+ * @code
  * #include <ui-gadget.h>
  * ...
  * static void layout_cb(ui_gadget_h ug, enum ug_mode mode, void *priv)
@@ -698,14 +728,46 @@ int ug_send_message(ui_gadget_h ug, service_h msg);
  * ug_disable_effect(ug);
  * evas_object_show(base);
  * ...
- * \endcode
+ * @endcode
  */
 int ug_disable_effect(ui_gadget_h ug);
 
+/**
+ * @brief Checks whether the given ug is installed.
+ *
+ * @details @b Purpose: This function is used for checking whether the given ug is installed or not
+ *
+ * @details @b Typical @b use @b case: Anyone who wants to know whether the given ug is installed or not.
+ *
+ * @details @b Method @b of @b function @b operation: This function returns a value indicating whether the ug is installed or not.
+ *
+ * @details @b Context @b of @b function: N/A.
+ *
+ * @since_tizen 2.3
+ *
+ * @param[in] name The UI gadget's name
+ *
+ * @return  @c 1 if installed, 
+ *          @c 0 if not installed, 
+ *          otherwise @c -1 in case of error
+ *
+ * @par Sample code:
+ * @code
+ * #include <ui-gadget.h>
+ * ...
+ * ret = ug_is_installed(ug);
+ * @endcode
+ */
+int ug_is_installed(const char *name);
+
+/**
+ * @}
+ */
+
 #ifdef __cplusplus
 }
+
 #endif
-/**
- * @} @} @}
- */
-#endif				/* __UI_GADGET_H__ */
+
+
+#endif              /* __UI_GADGET_H__ */

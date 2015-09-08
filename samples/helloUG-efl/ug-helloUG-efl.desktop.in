@@ -1,0 +1,10 @@
+Name=@UGNAME@
+Exec=/usr/apps/com.samsung.helloworld/bin/helloUG-efl
+Icon=
+Type=Application
+Version=0.1.0-0
+NoDisplay=true
+X-TIZEN-Multiple=true
+X-TIZEN-TaskManage=false
+X-TIZEN-Removable=true
+X-TIZEN-SVC=http://tizen.org/appcontrol/operation/test|NULL|NULL

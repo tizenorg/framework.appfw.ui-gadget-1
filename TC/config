@@ -1,0 +1,3 @@
+PKG_NAME=ui-gadget-1
+TET_INSTALL_HOST_PATH=/var/tmp/TETware
+TET_INSTALL_TARGET_PATH=/opt/home/TETware

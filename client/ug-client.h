@@ -44,13 +44,17 @@
 struct appdata {
 	Evas_Object *win;
 	Evas_Object *ly_main;
+	Evas_Object *conform;
 
+#ifndef _APPFW_FEATURE_APP_CONTROL_LITE
 	ui_gadget_h ug;
-	const char *name;
-	int is_frameview;
+	app_control_h request;
+#endif
 
 	bundle *data;
-	service_h request;
+	char *name;
+	int is_frameview;
+	int is_transient;
 };
 
 #endif				/* __UG_CLIENT_H__ */

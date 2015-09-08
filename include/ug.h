@@ -22,11 +22,8 @@
 #ifndef __UG_H__
 #define __UG_H__
 
-#include <bundle.h>
 #include "ug-module.h"
 #include "ui-gadget.h"
-
-struct ug_child;
 
 enum ug_state {
 	UG_STATE_READY = 0x00,
@@ -34,6 +31,7 @@ enum ug_state {
 	UG_STATE_RUNNING,
 	UG_STATE_STOPPED,
 	UG_STATE_DESTROYING,
+	UG_STATE_PENDING_DESTROY,
 	UG_STATE_DESTROYED,
 	UG_STATE_INVALID,
 	UG_STATE_MAX
@@ -50,6 +48,12 @@ enum ug_layout_state {
 	UG_LAYOUT_MAX
 };
 
+enum ug_ui_req {
+	UG_UI_REQ_GET_CONFORMANT = 0x00,
+	UG_UI_REQ_UNSET_CONTENT = 0x01,
+	UG_UI_REQ_MAX
+};
+
 struct ui_gadget_s {
 	const char *name;
 	void *layout;
@@ -63,14 +67,11 @@ struct ui_gadget_s {
 	struct ug_module *module;
 	struct ug_cbs cbs;
 
-	service_h service;
+	app_control_h app_control;
 
 	int destroy_me:1;
 	enum ug_layout_state layout_state;
 	void *effect_layout;
 };
-
-ui_gadget_h ug_root_create(void);
-int ug_free(ui_gadget_h ug);
 
 #endif				/* __UG_H__ */

@@ -1,0 +1,45 @@
+SET(UGCALLER ugcaller)
+
+SET(SRCS
+	src/ugcaller.c
+)
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}
+${CMAKE_CURRENT_SOURCE_DIR}/include/
+)
+
+INCLUDE(FindPkgConfig)
+pkg_check_modules(pkgs REQUIRED
+	elementary
+	evas
+	ecore-x
+	ecore
+	ecore-input
+	vconf
+	capi-appfw-application
+	dlog
+)
+
+FOREACH(flag ${pkgs_CFLAGS})
+	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
+ENDFOREACH(flag)
+
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
+
+ADD_EXECUTABLE(${UGCALLER} ${SRCS})
+TARGET_LINK_LIBRARIES(${UGCALLER} ${PROJECT_NAME} ${pkgs_LDFLAGS})
+
+ADD_CUSTOM_TARGET(${UGCALLER}.edj
+		COMMAND edje_cc -id ${CMAKE_CURRENT_SOURCE_DIR}/images
+		${CMAKE_CURRENT_SOURCE_DIR}/${UGCALLER}.edc ${CMAKE_CURRENT_BINARY_DIR}/${UGCALLER}.edj
+		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${UGCALLER}.edc
+)
+
+ADD_DEPENDENCIES(${UGCALLER} ${UGCALLER}.edj)
+
+
+INSTALL(TARGETS ${UGCALLER} DESTINATION /opt/apps/com.samsung.ugcaller/bin)
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/${UGCALLER}.edj DESTINATION /opt/apps/com.samsung.${UGCALLER}/res)
+CONFIGURE_FILE(com.samsung.${UGCALLER}.desktop.in ${CMAKE_BINARY_DIR}/com.samsung.${UGCALLER}.desktop)
+INSTALL(FILES ${CMAKE_BINARY_DIR}/com.samsung.${UGCALLER}.desktop DESTINATION /opt/share/applications)
+

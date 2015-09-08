@@ -1,0 +1,18 @@
+<manifest>
+        <define>
+                <domain name="com.samsung.helloworld"/>
+		<provide>
+                        <label name="com.samsung.helloworld::data"/>
+		</provide>
+                <request>
+                        <smack request="com.samsung.twitter" type="rw"/>
+                        <smack request="com.samsung.helloworld::data" type="rw"/>
+                </request>
+        </define>
+        <request>
+                <domain name="com.samsung.helloworld"/>
+        </request>
+	<assign>
+		<filesystem path="/opt/usr/apps/com.samsung.helloworld/data/ui-gadget_doc.h" label="com.samsung.helloworld::data"/>
+	</assign>
+</manifest>

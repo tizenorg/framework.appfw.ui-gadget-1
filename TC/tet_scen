@@ -1,0 +1,7 @@
+all
+	^ui-gadget
+##### Scenarios for UI gadget #####
+
+# UI gadget
+ui-gadget
+	:include:/unit/tslist

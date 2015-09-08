@@ -1,0 +1,9 @@
+#ifndef __@@UGNAME_FOR_HEADER@@_H__
+#define __@@UGNAME_FOR_HEADER@@_H__
+
+#include <Elementary.h>
+#include <libintl.h>
+
+#define PKGNAME "ug-@@UGNAME@@"
+
+#endif /* __@@UGNAME_FOR_HEADER@@_H__ */
