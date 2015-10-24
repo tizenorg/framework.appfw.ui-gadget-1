@@ -26,7 +26,6 @@
 #include <Ecore_X.h>
 #include <dlog.h>
 #include <aul.h>
-#include <app.h>
 #include <app_control_internal.h>
 #include <vconf.h>
 
@@ -42,6 +41,7 @@
 #include <dbus/dbus-glib-lowlevel.h>
 
 #include <pkgmgr-info.h>
+#include <bundle_internal.h>
 
 #ifdef _APPFW_FEATURE_UG_PROCESS_POOL
 #include <privilege-control.h>
@@ -56,7 +56,7 @@
 
 #define UG_CLIENT_API	__attribute__((visibility("default")))
 
-#define BROWSER_APP_ID	"com.samsung.browser"
+#define BROWSER_APP_ID	"org.tizen.browser"
 
 extern int appsvc_request_transient_app(bundle *b, Ecore_X_Window callee_id, appsvc_host_res_fn cbfunc, void *data);
 
@@ -590,7 +590,6 @@ void _ug_client_result_cb(ui_gadget_h ug, app_control_h reply, void *priv)
 	if((ret == APP_CONTROL_ERROR_NONE) && (value)) {
 		result = atoi(value);
 		LOGD("reply result is %d", result);
-		free(value);
 	} else {
 		LOGW("get reply result error(%d) . result will be APP_CONTROL_RESULT_SUCCEEDED", ret);
 		result = APP_CONTROL_RESULT_SUCCEEDED;
@@ -835,11 +834,11 @@ static Evas_Object *_ug_client_create_win(const char *name)
 #else
 
 #ifdef _APPFW_FEATURE_APP_CONTROL_LITE
-	elm_config_preferred_engine_set("opengl_x11");
+	elm_config_accel_preference_set("3d");
 #endif
 
 #ifdef _APPFW_FEATURE_UG_PROCESS_POOL
-	elm_config_preferred_engine_set("opengl_x11");
+	elm_config_accel_preference_set("3d");
 #endif
 
 	Evas_Object *eo = elm_win_add(NULL, name, ELM_WIN_BASIC);
@@ -993,7 +992,9 @@ static int _ug_client_update_argument(const char *optarg, struct appdata *ad)
 {
 	const char *key;
 	const char *val;
-	key = strtok((char *)optarg, ",");
+	char *save_ptr = NULL;
+
+	key = strtok_r((char *)optarg, ",", &save_ptr);
 	if (!key)
 		return -1;
 
@@ -1067,7 +1068,7 @@ static int app_create(void *data)
 
 	LOGD("app_create");
 
-	elm_app_base_scale_set(1.8);
+	elm_app_base_scale_set(2.4);
 
 	/* create window */
 	win = _ug_client_create_win(PACKAGE);

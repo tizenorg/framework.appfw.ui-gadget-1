@@ -40,7 +40,6 @@ extern "C" {
  */
 
 /**
- * @internal
  * @addtogroup CORE_LIB_GROUP_UI_GADGET_MODULE
  * @{
  */
@@ -198,7 +197,7 @@ int UG_INIT_EFL(void *win, enum ug_option opt);
  * @param[in] win   The Default window object, it is void pointer for supporting both GTK (GtkWidget *) and EFL (Evas_Object *)
  * @param[in] opt   The Default indicator state to restore application's indicator state
  *
- * @return  @c 0 on success, 
+ * @return  @c 0 on success,
  *          otherwise @c -1 on error
  *
  * @see UG_INIT_EFL()
@@ -246,7 +245,7 @@ int ug_init(void *disp, unsigned long xid, void *win, enum ug_option opt);
  * @param[in] mode         The mode of the UI gadget (UG_MODE_FULLVIEW | UG_MODE_FRAMEVIEW)
  * @param[in] app_control  The argument for the UI gadget (see @ref app_control_PG "Tizen managed api reference guide")
  *
- * @return  The pointer of UI gadget, 
+ * @return  The pointer of UI gadget,
  *          otherwise @c NULL on error
  *
  * @pre ug_init() should be called.
@@ -300,7 +299,7 @@ ui_gadget_h ug_create(ui_gadget_h parent, const char *name,
  *
  * @since_tizen 2.3
  *
- * @return  @c 0 on success, 
+ * @return  @c 0 on success,
  *          otherwise @c -1 on error
  *
  * @pre ug_init() should be called.
@@ -331,7 +330,7 @@ int ug_pause(void);
  *
  * @since_tizen 2.3
  *
- * @return  @c 0 on success, 
+ * @return  @c 0 on success,
  *          otherwise @c -1 on error
  *
  * @pre ug_init() should be called.
@@ -364,7 +363,7 @@ int ug_resume(void);
  *
  * @param[in] ug The UI gadget
  *
- * @return  @c 0 on success, 
+ * @return  @c 0 on success,
  *          otherwise @c -1 on error
  *
  * @pre ug_init() should be called \n
@@ -396,7 +395,7 @@ int ug_destroy(ui_gadget_h ug);
  *
  * @since_tizen 2.3
  *
- * @return  @c 0 on success, 
+ * @return  @c 0 on success,
  *          otherwise @c -1 on error
  *
  * @pre ug_init() should be called.
@@ -429,7 +428,7 @@ int ug_destroy_all(void);
  *
  * @param[in] ug The UI gadget
  *
- * @return  The pointer of the base layout, 
+ * @return  The pointer of the base layout,
  *          otherwise @c NULL on error \n
  *          The result value is a void pointer that supports both GTK (GtkWidget *) and EFL (Evas_Object *).
  *
@@ -465,7 +464,7 @@ void *ug_get_layout(ui_gadget_h ug);
  *
  * @param[in] ug The UI gadget
  *
- * @return  The pointer of the base layout, 
+ * @return  The pointer of the base layout,
  *          otherwise @c NULL on error \n
             The result value is a void pointer that supports both GTK (GtkWidget *) and EFL (Evas_Object *).
  *
@@ -499,7 +498,7 @@ void *ug_get_parent_layout(ui_gadget_h ug);
  *
  * @since_tizen 2.3
  *
- * @return  The pointer of a default window, 
+ * @return  The pointer of a default window,
  *          otherwise @c NULL on error \n
  *           The result value is void pointer that supports both GTK (GtkWidget *) and EFL (Evas_Object *).
  *
@@ -530,7 +529,7 @@ void *ug_get_window(void);
  *
  * @since_tizen 2.3
  *
- * @return  The pointer of the default window, 
+ * @return  The pointer of the default window,
  *          otherwise @c NULL on error \n
  *          The result value is a void pointer for supporting both GTK (GtkWidget *) and EFL (Evas_Object *).
  *
@@ -597,7 +596,7 @@ enum ug_mode ug_get_mode(ui_gadget_h ug);
  *
  * @param[in]  The event UI gadget event (see enum ug_event)
  *
- * @return  @c 0 on success, 
+ * @return  @c 0 on success,
  *          otherwise @c -1 on error
  *
  * @pre ug_init() should be called.
@@ -630,7 +629,7 @@ int ug_send_event(enum ug_event event);
  *
  * @param[in] event The UI gadget key event (see enum ug_key_event)
  *
- * @return  @c 0 on success, 
+ * @return  @c 0 on success,
  *          otherwise @c -1 on error
  *
  * @pre ug_init() should be called.
@@ -666,7 +665,7 @@ int ug_send_key_event(enum ug_key_event event);
  * @param[in] ug   The UI gadget
  * @param[in] msg  The Message to send, which is app_control type (see @ref app_control_PG "Tizen managed api reference guide")
  *
- * @return  @c 0 on success, 
+ * @return  @c 0 on success,
  *          otherwise @c -1 on error
  *
  * @pre ug_init() should be called. \n
@@ -708,7 +707,7 @@ int ug_send_message(ui_gadget_h ug, app_control_h msg);
  *
  * @param[in] ug The UI gadget
  *
- * @return  @c 0 on success, 
+ * @return  @c 0 on success,
  *          otherwise @c -1 on error
  *
  * @pre ug_init() should be called. \n
@@ -747,8 +746,8 @@ int ug_disable_effect(ui_gadget_h ug);
  *
  * @param[in] name The UI gadget's name
  *
- * @return  @c 1 if installed, 
- *          @c 0 if not installed, 
+ * @return  @c 1 if installed,
+ *          @c 0 if not installed,
  *          otherwise @c -1 in case of error
  *
  * @par Sample code:
@@ -759,6 +758,74 @@ int ug_disable_effect(ui_gadget_h ug);
  * @endcode
  */
 int ug_is_installed(const char *name);
+
+/**
+ * @brief Pauses the given UI gadget instance.
+ *
+ * @details @b Purpose: This function is used to pause the specified UI gadget instance and its children in the "Running" state. Eventually, the state of the UI gadget instance will be "Stopped".
+ *
+ * @details @b Typical @b use @b case: Application developers who want to pause the specified UI gadget instance can use this function.
+ *
+ * @details @b Method @b of @b function @b operation: "Pause" state operations of the UI gadgets with the "Running" state in the sub-tree that has the specified UI gadget as the root node are invoked by post-order traversal.
+ *
+ *          @b Context @b of @b function: This function is supposed to be called after successful initialization with ug_init() and creation of ug_create().
+ *
+ * @since_tizen 2.4
+ *
+ * @param[in] ug The UI gadget
+ *
+ * @return  @c 0 on success,
+ *          otherwise @c -1 on error
+ *
+ * @pre ug_init() should be called.
+ *	ug_create() should be used to create the @a ug gadget.
+ *
+ * @see ug_resume_ug()
+ *
+ * @par Sample code:
+ * @code
+ * #include <ui-gadget.h>
+ * ...
+ * // pauses the given UI gadget instance.
+ * ug_pause_ug(ug);
+ * ...
+ * @endcode
+ */
+int ug_pause_ug(ui_gadget_h ug);
+
+/**
+ * @brief Resumes the given UI gadget instance.
+ *
+ * @details @b Purpose: This function is used to resume the specified UI gadget instance and its children in the "Stopped" state. Eventually, the state of the UI gadget instance will be "Running".
+ *
+ * @details @b Typical @b use @b case: Application developers who want to resume the specified UI gadget instance can use this function.
+ *
+ * @details @b Method @b of @b function @b operation: "Resume" state operations of the UI gadgets with the "Stopped" state in the sub-tree that has specified UI gadget as the root node are invoked by post-order traversal.
+ *
+ * @details @b Context @b of @b function: This function should be called after successful initialization by ug_init() and creation of ug_create().
+ *
+ * @since_tizen 2.4
+ *
+ * @param[in] ug The UI gadget
+ *
+ * @return  @c 0 on success,
+ *          otherwise @c -1 on error
+ *
+ * @pre ug_init() should be called.
+ *	ug_create() should be used to create the @a ug gadget.
+ *
+ * @see ug_pause_ug()
+ *
+ * @par Sample code:
+ * @code
+ * #include <ui-gadget.h>
+ * ...
+ * // resumes the given UI gadget instance.
+ * ug_resume_ug(ug);
+ * ...
+ * @endcode
+ */
+int ug_resume_ug(ui_gadget_h ug);
 
 /**
  * @}

@@ -605,17 +605,10 @@ static int ugman_ug_create(void *data)
 	struct ug_cbs *cbs;
 	struct ug_engine_ops *eng_ops = NULL;
 	void* conformant = NULL;
-	void* conformant2 = NULL;
 
 
 	if (!ug || ug->state != UG_STATE_READY) {
 		_ERR("ug(%p) input param error", ug);
-		return -1;
-	}
-
-	conformant = ugman_get_conformant();
-	if(!conformant) {
-		_ERR("conformant error. ug_create(%s) fail.", ug->name);
 		return -1;
 	}
 
@@ -637,10 +630,10 @@ static int ugman_ug_create(void *data)
 		}
 		if (ug->mode == UG_MODE_FULLVIEW) {
 			if (eng_ops && eng_ops->create) {
-				conformant2 = eng_ops->create(ug_man.win, ug, ugman_ug_start);
-				if((!conformant2) || (conformant != conformant2)) {
-					_ERR("conformant(%p,%p) error. ug(%p) destory cb is invoked.",
-							conformant,conformant2,ug);
+				conformant = eng_ops->create(ug_man.win, ug, ugman_ug_start);
+				if(!conformant) {
+					_ERR("conformant(%p) error. ug(%p) destory cb is invoked.",
+							conformant,ug);
 					ops->destroy(ug, ug->app_control, ops->priv);
 					return -1;
 				}
@@ -699,7 +692,7 @@ static ui_gadget_h ugman_root_ug_create(void)
 int ugman_ug_add(ui_gadget_h parent, ui_gadget_h ug)
 {
 	if (!ug_man.is_initted) {
-		_ERR("failed: manager is not initted");
+		_ERR("failed: manager is not initialized");
 		return -1;
 	}
 
@@ -858,7 +851,7 @@ int ugman_ug_del(ui_gadget_h ug)
 	}
 
 	if (!ug_man.is_initted) {
-		_WRN("ugman_ug_del failed: manager is not initted");
+		_WRN("ugman_ug_del failed: manager is not initialized");
 		return -1;
 	}
 
@@ -965,7 +958,7 @@ int ugman_ug_del_all(void)
 {
 	/*  Terminate */
 	if (!ug_man.is_initted) {
-		_ERR("ugman_ug_del_all failed: manager is not initted");
+		_ERR("ugman_ug_del_all failed: manager is not initialized");
 		return -1;
 	}
 
@@ -1007,7 +1000,7 @@ int ugman_resume(void)
 {
 	/* RESUME */
 	if (!ug_man.is_initted) {
-		_ERR("ugman_resume failed: manager is not initted");
+		_ERR("ugman_resume failed: manager is not initialized");
 		return -1;
 	}
 
@@ -1023,11 +1016,30 @@ int ugman_resume(void)
 	return 0;
 }
 
+int ugman_resume_ug(ui_gadget_h ug)
+{
+	if (!ug_man.is_initted) {
+		_ERR("ugman_pause_ug failed: manager is not initialized");
+		return -1;
+	}
+
+	if (!ug_man.root || !ug) {
+		_WRN("ugman_pause_ug failed: no root");
+		return -1;
+	}
+
+	_DBG("ugman_resume_ug called");
+
+	ugman_idler_add((Idle_Cb)ugman_ug_resume, ug);
+
+	return 0;
+}
+
 int ugman_pause(void)
 {
 	/* PAUSE (Background) */
 	if (!ug_man.is_initted) {
-		_ERR("ugman_pause failed: manager is not initted");
+		_ERR("ugman_pause failed: manager is not initialized");
 		return -1;
 	}
 
@@ -1039,6 +1051,25 @@ int ugman_pause(void)
 	_DBG("ugman_pause called");
 
 	ugman_idler_add((Idle_Cb)ugman_ug_pause, ug_man.root);
+
+	return 0;
+}
+
+int ugman_pause_ug(ui_gadget_h ug)
+{
+	if (!ug_man.is_initted) {
+		_ERR("ugman_pause_ug failed: manager is not initialized");
+		return -1;
+	}
+
+	if (!ug_man.root || !ug) {
+		_WRN("ugman_pause_ug failed: no root");
+		return -1;
+	}
+
+	_DBG("ugman_pause_ug called");
+
+	ugman_idler_add((Idle_Cb)ugman_ug_pause, ug);
 
 	return 0;
 }
@@ -1060,7 +1091,7 @@ int ugman_send_event(enum ug_event event)
 
 	/* Propagate event */
 	if (!ug_man.is_initted) {
-		_ERR("ugman_send_event failed: manager is not initted");
+		_ERR("ugman_send_event failed: manager is not initialized");
 		return -1;
 	}
 
@@ -1117,7 +1148,7 @@ static int ugman_send_key_event_to_ug(ui_gadget_h ug,
 int ugman_send_key_event(enum ug_key_event event)
 {
 	if (!ug_man.is_initted) {
-		_ERR("ugman_send_key_event failed: manager is not initted");
+		_ERR("ugman_send_key_event failed: manager is not initialized");
 		return -1;
 	}
 

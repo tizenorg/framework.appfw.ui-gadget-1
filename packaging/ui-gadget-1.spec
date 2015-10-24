@@ -16,7 +16,6 @@ BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(appsvc)
 BuildRequires:  pkgconfig(capi-appfw-application)
-BuildRequires:  pkgconfig(capi-appfw-app-manager)
 BuildRequires:  pkgconfig(vconf)
 BuildRequires:  pkgconfig(dbus-glib-1)
 BuildRequires:  pkgconfig(aul)
@@ -95,12 +94,12 @@ rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/license
 install LICENSE %{buildroot}/usr/share/license/%{name}
 cp -rf %{buildroot}/usr/bin/ug-client %{buildroot}/usr/bin/ug-launcher
-mkdir -p %{buildroot}/usr/apps/com.samsung.helloworld/bin
-cp -rf %{buildroot}/usr/bin/ug-client %{buildroot}/usr/apps/com.samsung.helloworld/bin/helloworld
-cp -rf %{buildroot}/usr/bin/ug-client %{buildroot}/usr/apps/com.samsung.helloworld/bin/hello
+mkdir -p %{buildroot}/usr/apps/org.tizen.helloworld/bin
+cp -rf %{buildroot}/usr/bin/ug-client %{buildroot}/usr/apps/org.tizen.helloworld/bin/helloworld
+cp -rf %{buildroot}/usr/bin/ug-client %{buildroot}/usr/apps/org.tizen.helloworld/bin/hello
 
 #Signing
-%define tizen_sign_base /usr/apps/com.samsung.helloworld/
+%define tizen_sign_base /usr/apps/org.tizen.helloworld/
 %define tizen_sign 1
 %define tizen_author_sign 1
 %define tizen_dist_sign 1
@@ -114,17 +113,14 @@ mkdir -p /usr/ug/lib/
 mkdir -p /usr/ug/res/images
 
 %post samples
-#mkdir -p /opt/usr/apps/com.samsung.helloworld/
-#/bin/cp /usr/bin/ug-client /opt/usr/apps/com.samsung.helloworld/bin/helloworld
-chsmack -a "com.samsung.helloworld" -e "com.samsung.helloworld" /usr/apps/com.samsung.helloworld/bin/helloworld
-#/bin/mkdir -p /usr/apps/com.samsung.helloworld/lib/ug/
-/bin/cp /opt/usr/ug/lib/libug-helloUG-efl.so /usr/apps/com.samsung.helloworld/lib/ug/libhelloworld.so
-/bin/cp /opt/usr/ug/lib/libug-helloUG-efl.so /usr/apps/com.samsung.helloworld/lib/ug/libhelloUG-efl.so
-/bin/cp /opt/usr/ug/lib/libug-helloUG-efl.so /usr/apps/com.samsung.helloworld/lib/libug-helloworld.so
-/bin/cp /opt/usr/ug/lib/libug-helloUG-efl.so /usr/apps/com.samsung.helloworld/lib/libug-hello.so
+chsmack -a "org.tizen.helloworld" -e "org.tizen.helloworld" /usr/apps/org.tizen.helloworld/bin/helloworld
+/bin/cp /opt/usr/ug/lib/libug-helloUG-efl.so /usr/apps/org.tizen.helloworld/lib/ug/libhelloworld.so
+/bin/cp /opt/usr/ug/lib/libug-helloUG-efl.so /usr/apps/org.tizen.helloworld/lib/ug/libhelloUG-efl.so
+/bin/cp /opt/usr/ug/lib/libug-helloUG-efl.so /usr/apps/org.tizen.helloworld/lib/libug-helloworld.so
+/bin/cp /opt/usr/ug/lib/libug-helloUG-efl.so /usr/apps/org.tizen.helloworld/lib/libug-hello.so
 /bin/cp /opt/usr/ug/lib/libug-helloUG-efl.so /usr/ug/lib/libug-hello.so
 mv /opt/usr/ug/lib/libug-helloUG-efl.so /opt/usr/ug/lib/libug-helloUG2-efl.so
-ln -sf /usr/bin/ug-client /usr/apps/com.samsung.helloworld/bin/helloUG-efl
+ln -sf /usr/bin/ug-client /usr/apps/org.tizen.helloworld/bin/helloUG-efl
 
 %postun -p /sbin/ldconfig
 
@@ -153,17 +149,17 @@ chsmack -a "_" /usr/ug/res/images/
 %{_libdir}/pkgconfig/%{name}.pc
 
 %files samples
-%manifest samples/helloUG-efl/com.samsung.helloworld.manifest
+%manifest samples/helloUG-efl/org.tizen.helloworld.manifest
 /etc/smack/accesses2.d/helloug.rule
 /opt/usr/ug/lib/libug-helloUG-efl.so*
 /usr/share/applications/*.desktop
-/usr/share/packages/com.samsung.helloworld.xml
-/opt/usr/apps/com.samsung.helloworld/data/ui-gadget_doc.h
-/usr/apps/com.samsung.helloworld/lib/ug/*
-/usr/apps/com.samsung.helloworld/bin/*
+/usr/share/packages/org.tizen.helloworld.xml
+/opt/usr/apps/org.tizen.helloworld/data/ui-gadget_doc.h
+/usr/apps/org.tizen.helloworld/lib/ug/*
+/usr/apps/org.tizen.helloworld/bin/*
 #Signing
-/usr/apps/com.samsung.helloworld/author-signature.xml
-/usr/apps/com.samsung.helloworld/signature1.xml
+/usr/apps/org.tizen.helloworld/author-signature.xml
+/usr/apps/org.tizen.helloworld/signature1.xml
 
 %files template
 /usr/bin/ug-gen.sh

@@ -38,8 +38,8 @@ ADD_CUSTOM_TARGET(${UGCALLER}.edj
 ADD_DEPENDENCIES(${UGCALLER} ${UGCALLER}.edj)
 
 
-INSTALL(TARGETS ${UGCALLER} DESTINATION /opt/apps/com.samsung.ugcaller/bin)
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/${UGCALLER}.edj DESTINATION /opt/apps/com.samsung.${UGCALLER}/res)
-CONFIGURE_FILE(com.samsung.${UGCALLER}.desktop.in ${CMAKE_BINARY_DIR}/com.samsung.${UGCALLER}.desktop)
-INSTALL(FILES ${CMAKE_BINARY_DIR}/com.samsung.${UGCALLER}.desktop DESTINATION /opt/share/applications)
+INSTALL(TARGETS ${UGCALLER} DESTINATION /opt/apps/org.tizen.ugcaller/bin)
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/${UGCALLER}.edj DESTINATION /opt/apps/org.tizen.${UGCALLER}/res)
+CONFIGURE_FILE(org.tizen.${UGCALLER}.desktop.in ${CMAKE_BINARY_DIR}/org.tizen.${UGCALLER}.desktop)
+INSTALL(FILES ${CMAKE_BINARY_DIR}/org.tizen.${UGCALLER}.desktop DESTINATION /opt/share/applications)
 

@@ -1,6 +1,6 @@
 Name=ugcaller
 Type=Application
-Exec=/opt/apps/com.samsung.ugcaller/bin/ugcaller
+Exec=/opt/apps/org.tizen.ugcaller/bin/ugcaller
 Icon=
 Nodisplay=True
 Version=0.1.0

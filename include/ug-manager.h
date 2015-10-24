@@ -38,7 +38,9 @@ int ugman_ug_del_all(void);
 
 int ugman_init(Display *disp, Window xid, void *win, enum ug_option opt);
 int ugman_resume(void);
+int ugman_resume_ug(ui_gadget_h ug);
 int ugman_pause(void);
+int ugman_pause_ug(ui_gadget_h ug);
 int ugman_send_event(enum ug_event event);
 int ugman_send_key_event(enum ug_key_event event);
 int ugman_send_message(ui_gadget_h ug, app_control_h msg);

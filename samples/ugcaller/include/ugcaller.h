@@ -30,7 +30,7 @@
 #endif
 
 #define _EDJ(o)			elm_layout_edje_get(o)
-#define EDJ_FILE "/opt/apps/com.samsung.ugcaller/res/ugcaller.edj"
+#define EDJ_FILE "/opt/apps/org.tizen.ugcaller/res/ugcaller.edj"
 #define GRP_MAIN "main"
 
 typedef struct {

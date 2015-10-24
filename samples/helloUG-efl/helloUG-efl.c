@@ -209,7 +209,7 @@ static void __helloUG_launch_reply_cb(app_control_h request, app_control_h reply
 {
 	LOGD("%s : called\n", __func__);
 
-	__helloUG_get_extra_data_cb(reply, "http://samsung.com/appcontrol/data/permission_control", NULL);
+	__helloUG_get_extra_data_cb(reply, "http://tizen.org/appcontrol/data/permission_control", NULL);
 }
 
 
@@ -261,7 +261,7 @@ static void __helloUG_ug_create_helloworld(void *data, Evas_Object *obj, void *e
 	cbs.destroy_cb = __helloUG_multi_destroy_cb;
 	cbs.priv = ugd;
 
-	ugd->sub_ug = ug_create(ugd->ug, "com.samsung.helloworld", UG_MODE_FULLVIEW, NULL, &cbs);
+	ugd->sub_ug = ug_create(ugd->ug, "org.tizen.helloworld", UG_MODE_FULLVIEW, NULL, &cbs);
 }
 
 static void __helloUG_helloworldug_load_cb(void *data, Evas_Object *obj, void *event_info)
@@ -269,7 +269,7 @@ static void __helloUG_helloworldug_load_cb(void *data, Evas_Object *obj, void *e
 	struct ug_data *ugd;
 	struct ug_cbs cbs = { 0, };
 	//const char* ug_name = "helloUG-efl";
-	const char* ug_name = "com.samsung.helloworld";
+	const char* ug_name = "org.tizen.helloworld";
 
 	LOGD("%s : called\n", __func__);
 
@@ -306,7 +306,6 @@ static void __helloUG_helloworldug_load_cb(void *data, Evas_Object *obj, void *e
 static void __helloUG_helloug_load_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	struct ug_cbs cbs = { 0, };
-	//const char* ug_name = "com.samsung.helloworld";
 	int mode;
 
 	LOGD("%s : called\n", __func__);
@@ -351,8 +350,7 @@ static void __helloUG_result_cb(void *data, Evas_Object *obj, void *event_info)
 	app_control_add_extra_data(result, "name", "hello-UG");
 	app_control_add_extra_data(result, "description", "sample UI gadget");
 	app_control_add_extra_data(result, "__UG_SEND_REUSLT__", APP_CONTROL_RESULT_SUCCEEDED);
-	app_control_add_extra_data(result, "http://samsung.com/appcontrol/data/permission_control", "no");
-	//ug_send_result_full(ugd->ug, result, APP_CONTROL_RESULT_SUCCEEDED);
+	app_control_add_extra_data(result, "http://tizen.org/appcontrol/data/permission_control", "no");
 
 	ret = app_control_reply_to_launch_request(result, ugd->service, (app_control_result_e)APP_CONTROL_RESULT_SUCCEEDED);
 	if (ret != APP_CONTROL_ERROR_NONE)
@@ -416,7 +414,7 @@ static Evas_Object *__helloUG_create_content(Evas_Object *parent, struct ug_data
 	elm_list_mode_set(list, ELM_LIST_COMPRESS);
 
 	/* Main Menu Items Here */
-	sprintf(lable,"Hello UI Gadget / PID : %d", getpid());
+	snprintf(lable, sizeof(lable), "Hello UI Gadget / PID : %d", getpid());
 	elm_list_item_append(list, lable, NULL, NULL, NULL, NULL);
 	memset(lable,0x00,124);
 
@@ -424,27 +422,27 @@ static Evas_Object *__helloUG_create_content(Evas_Object *parent, struct ug_data
 #if 0
 	elm_list_item_append(list, "Create shared helloUG2", NULL, NULL, __helloUG_helloug_load_cb, "helloUG2-efl");
 	elm_list_item_append(list, "Create priv helloug(appid)", NULL, NULL, __helloUG_helloug_load_cb, "helloUG-efl");
-	elm_list_item_append(list, "Create priv helloug(appid)", NULL, NULL, __helloUG_helloug_load_cb, "com.samsung.helloUG-efl");
+	elm_list_item_append(list, "Create priv helloug(appid)", NULL, NULL, __helloUG_helloug_load_cb, "org.tizen.helloUG-efl");
 	elm_list_item_append(list, "Create shared wifi", NULL, NULL, __helloUG_helloug_load_cb, "wifi-efl-UG");
 #endif
 
-	elm_list_item_append(list, "Launch Hello UGAPP", NULL, NULL, __helloUG_launch_cb, "com.samsung.hello");
-	elm_list_item_append(list, "Launch Hello UGAPP(POOL)", NULL, NULL, __helloUG_launch_cb, "com.samsung.helloworld");
-	elm_list_item_append(list, "Launch Hello UGAPP(UG POOL)", NULL, NULL, __helloUG_launch_cb, "com.samsung.helloUG-efl");
+	elm_list_item_append(list, "Launch Hello UGAPP", NULL, NULL, __helloUG_launch_cb, "org.tizen.hello");
+	elm_list_item_append(list, "Launch Hello UGAPP(POOL)", NULL, NULL, __helloUG_launch_cb, "org.tizen.helloworld");
+	elm_list_item_append(list, "Launch Hello UGAPP(UG POOL)", NULL, NULL, __helloUG_launch_cb, "org.tizen.helloUG-efl");
 
-	//elm_list_item_append(list, "Launch Storage UGAPP", NULL, NULL, __helloUG_launch_cb, "com.samsung.set-storage");
-	//elm_list_item_append(list, "Launch Storage UGAPP(POOL)", NULL, NULL, __helloUG_launch_cb, "com.samsung.set-storage-pool");
+	//elm_list_item_append(list, "Launch Storage UGAPP", NULL, NULL, __helloUG_launch_cb, "org.tizen.set-storage");
+	//elm_list_item_append(list, "Launch Storage UGAPP(POOL)", NULL, NULL, __helloUG_launch_cb, "org.tizen.set-storage-pool");
 	//elm_list_item_append(list, "Launch Storage UGAPP(UG POOL)", NULL, NULL, __helloUG_launch_cb, "setting-storage-efl");
-	elm_list_item_append(list, "Launch Setting UGAPP", NULL, NULL, __helloUG_launch_cb, "com.samsung.set-time");
-	elm_list_item_append(list, "Launch Setting UGAPP", NULL, NULL, __helloUG_launch_cb, "com.samsung.set-time-pool");
+	elm_list_item_append(list, "Launch Setting UGAPP", NULL, NULL, __helloUG_launch_cb, "org.tizen.set-time");
+	elm_list_item_append(list, "Launch Setting UGAPP", NULL, NULL, __helloUG_launch_cb, "org.tizen.set-time-pool");
 	elm_list_item_append(list, "Launch Setting UGAPP", NULL, NULL, __helloUG_launch_cb, "setting-time-efl");
 
 #if 0
 	//elm_list_item_append(list, "Create Hello UG", NULL, NULL, __helloUG_helloug_load_cb, ugd);
 	//elm_list_item_append(list, "Create HelloWorld APP UG", NULL, NULL, __helloUG_helloug_load_cb, ugd);
-	elm_list_item_append(list, "Launch Hello UGAPP(PROCESS POOL)", NULL, NULL, __helloUG_launch_cb, "com.samsung.helloworld");
-	//elm_list_item_append(list, "Launch Hello UGAPP(UG-CLIENT POOL)", NULL, NULL, __helloUG_pool_launch_cb, "com.samsung.helloworld");
-	elm_list_item_append(list, "Show UG APP", NULL, NULL, __helloUG_show_cb, "com.samsung.helloworld");
+	elm_list_item_append(list, "Launch Hello UGAPP(PROCESS POOL)", NULL, NULL, __helloUG_launch_cb, "org.tizen.helloworld");
+	//elm_list_item_append(list, "Launch Hello UGAPP(UG-CLIENT POOL)", NULL, NULL, __helloUG_pool_launch_cb, "org.tizen.helloworld");
+	elm_list_item_append(list, "Show UG APP", NULL, NULL, __helloUG_show_cb, "org.tizen.helloworld");
 
 	elm_list_item_append(list, "Launch WIFI UGAPP(PROCESS POOL)", NULL, NULL, __helloUG_launch_cb, "wifi-efl-ug-lite");
 	//elm_list_item_append(list, "Launch WIFI UGAPP(UG-CLIENT POOL)", NULL, NULL, __helloUG_pool_launch_cb, "wifi-efl-ug-lite");
@@ -466,7 +464,7 @@ static Evas_Object *__helloUG_create_content(Evas_Object *parent, struct ug_data
 #if 0
 	/* permission test */
 	FILE *file;
-	if ((file = fopen("/opt/usr/apps/com.samsung.helloworld/data/ui-gadget_doc.h", "rw"))) {
+	if ((file = fopen("/opt/usr/apps/org.tizen.helloworld/data/ui-gadget_doc.h", "rw"))) {
 		LOGD("helloworld file open success");
 	} else {
 		LOGE("\x1b[31m helloworld file open fail (%d) \x1b[0m", errno);

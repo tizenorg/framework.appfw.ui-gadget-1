@@ -89,9 +89,31 @@ UG_API int ug_pause(void)
 	return ugman_pause();
 }
 
+UG_API int ug_pause_ug(ui_gadget_h ug)
+{
+	if (!ug || !ugman_ug_exist(ug)) {
+		_ERR("ug_pause_ug() failed: Invalid ug");
+		errno = EINVAL;
+		return -1;
+	}
+
+	return ugman_pause_ug(ug);
+}
+
 UG_API int ug_resume(void)
 {
 	return ugman_resume();
+}
+
+UG_API int ug_resume_ug(ui_gadget_h ug)
+{
+	if (!ug || !ugman_ug_exist(ug)) {
+		_ERR("ug_resume_ug() failed: Invalid ug");
+		errno = EINVAL;
+		return -1;
+	}
+
+	return ugman_resume_ug(ug);
 }
 
 UG_API int ug_destroy(ui_gadget_h ug)

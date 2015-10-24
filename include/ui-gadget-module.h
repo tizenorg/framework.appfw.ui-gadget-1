@@ -39,7 +39,6 @@ extern "C" {
  */
 
 /**
- * @internal
  * @addtogroup CORE_LIB_GROUP_UI_GADGET_MODULE_MODULE
  * @{
  */

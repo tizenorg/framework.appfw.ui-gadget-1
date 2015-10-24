@@ -27,8 +27,7 @@
 #include <dlfcn.h>
 #include <unistd.h>
 #include <sys/types.h>
-
-#include <app_manager.h>
+#include <aul.h>
 #include <pkgmgr-info.h>
 
 #include "ug-module.h"
@@ -150,7 +149,14 @@ int __get_ug_info(const char* name, char** ug_file_path, char** package)
 	}
 
 	//temp
-	app_manager_get_app_id(getpid(), &pkg_id);
+	pkg_id = (char *)malloc(PATH_MAX);
+	if (pkg_id) {
+		ret = aul_app_get_pkgid_bypid(getpid(), pkg_id, PATH_MAX);
+		if (ret != AUL_R_OK) {
+			free(pkg_id);
+			pkg_id = NULL;
+		}
+	}
 	if (pkg_id) {
 		snprintf(ug_file, PATH_MAX, "/usr/apps/%s/lib/libug-%s.so", pkg_id, name);
 		if (file_exist(ug_file)) {
@@ -176,7 +182,7 @@ int __get_ug_info(const char* name, char** ug_file_path, char** package)
 
 	/* Get pkg name by appid */
 	pkgmgrinfo_appinfo_h handle;
-#ifdef GET_UGINFO_BY_APPID	
+#ifdef GET_UGINFO_BY_APPID
 	ret = pkgmgrinfo_appinfo_get_appinfo(name, &handle);
 #else
 	ret = pkgmgrinfo_appinfo_get_uginfo(name, &handle);
@@ -188,6 +194,7 @@ int __get_ug_info(const char* name, char** ug_file_path, char** package)
 	ret = pkgmgrinfo_appinfo_get_pkgid(handle, &pkg_id);
 	if (ret != PMINFO_R_OK) {
 		_DBG("fail to get pkgid from appinfo handle");
+		pkgmgrinfo_appinfo_destroy_appinfo(handle);
 		goto err_func;
 	} else {
 		SECURE_LOGD("pkg id: %s\n", pkg_id);
@@ -245,6 +252,7 @@ out_func:
 	return ret;
 
 err_func:
+
 	return -1;
 }
 

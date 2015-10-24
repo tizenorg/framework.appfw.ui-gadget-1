@@ -19,7 +19,6 @@
 #define __TIZEN_CORE_LIB_UI_GADGET_DOC_H__
 
 /**
- * @internal
  * @defgroup CORE_LIB_GROUP_UI_GADGET_MODULE UI Gadget
  * @brief  The UI gadget is a visual component providing views(or features) of other applications.
  * @ingroup CAPI_APPLICATION_FRAMEWORK
@@ -36,7 +35,6 @@
  */
 
 /**
- * @internal
  * @defgroup CORE_LIB_GROUP_UI_GADGET_MODULE_MODULE UI Gadget Module
  * @brief
  * @ingroup CORE_LIB_GROUP_UI_GADGET_MODULE

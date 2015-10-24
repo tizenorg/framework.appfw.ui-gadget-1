@@ -22,10 +22,10 @@ SET_TARGET_PROPERTIES(${HELLOUG_EFL} PROPERTIES COMPILE_FLAGS "${HELLOUG_EFL_CFL
 TARGET_LINK_LIBRARIES(${HELLOUG_EFL} ${HELLOUG_EFL_PKGS_LDFLAGS})
 
 INSTALL(TARGETS ${HELLOUG_EFL} DESTINATION /opt/usr/ug/lib)
-INSTALL(TARGETS ${HELLOUG_EFL} DESTINATION /usr/apps/com.samsung.helloworld/lib/ug)
+INSTALL(TARGETS ${HELLOUG_EFL} DESTINATION /usr/apps/org.tizen.helloworld/lib/ug)
 CONFIGURE_FILE(${HELLOUG_EFL}.desktop.in ${CMAKE_BINARY_DIR}/${HELLOUG_EFL}.desktop)
 INSTALL(FILES ${CMAKE_BINARY_DIR}/${HELLOUG_EFL}.desktop DESTINATION /usr/share/applications)
-INSTALL(FILES ${CMAKE_BINARY_DIR}/doc/ui-gadget_doc.h DESTINATION /opt/usr/apps/com.samsung.helloworld/data)
-INSTALL(FILES ${CMAKE_BINARY_DIR}/samples/helloUG-efl/com.samsung.helloworld.xml DESTINATION /usr/share/packages)
+INSTALL(FILES ${CMAKE_BINARY_DIR}/doc/ui-gadget_doc.h DESTINATION /opt/usr/apps/org.tizen.helloworld/data)
+INSTALL(FILES ${CMAKE_BINARY_DIR}/samples/helloUG-efl/org.tizen.helloworld.xml DESTINATION /usr/share/packages)
 INSTALL(FILES ${CMAKE_BINARY_DIR}/samples/helloUG-efl/helloug.rule DESTINATION /etc/smack/accesses2.d/)
 

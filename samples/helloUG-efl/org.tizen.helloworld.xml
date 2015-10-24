@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://tizen.org/ns/packages" package="org.tizen.helloworld" version="0.1.0" install-location="internal-only">
+	<label>helloworld</label>
+	<author email="samsung.kim@samsung.com" href="www.samsung.com">Samsung Kim</author>
+	<description>helloworld</description>
+	<ui-application appid="org.tizen.helloworld" exec="/usr/apps/org.tizen.helloworld/bin/helloworld" nodisplay="false" multiple="false" type="capp" taskmanage="true" process-pool="true">
+		<icon>org.tizen.helloworld.png</icon>
+		<label>helloworld</label>
+		<label xml:lang="en-us">Helloworld</label>
+		<label xml:lang="ko-kr">헬로우월드</label>
+	</ui-application>
+    	<ui-application appid="org.tizen.helloUG-efl" exec="/usr/apps/org.tizen.helloworld/bin/helloUG-efl" ui-gadget="true" nodisplay="false" multiple="false" type="capp" taskmanage="true" process-pool="true">
+		<icon>org.tizen.helloworld.png</icon>
+		<label>helloworld</label>
+		<label xml:lang="en-us">Helloug</label>
+		<label xml:lang="ko-kr">헬로우UG</label>
+	</ui-application>
+	<ui-application appid="org.tizen.hello" exec="/usr/apps/org.tizen.helloworld/bin/hello" nodisplay="false" multiple="false" type="capp" taskmanage="true">
+                <icon>org.tizen.helloworld.png</icon>
+                <label>helloworld</label>
+                <label xml:lang="en-us">Helloworld</label>
+                <label xml:lang="ko-kr">헬로우월드</label>
+        </ui-application>
+	<ui-application appid="org.tizen.set-time" exec="/usr/apps/org.tizen.helloworld/bin/setting-time-efl" nodisplay="false" multiple="true" type="capp" taskmanage="true">
+	</ui-application>
+	<ui-application appid="org.tizen.set-time-pool" exec="/usr/apps/org.tizen.helloworld/bin/setting-time-efl-pool" nodisplay="false" multiple="true" type="capp" taskmanage="true" process-pool="true">
+        </ui-application>
+    <privileges>
+        <privilege>http://developer.samsung.com/tizen/privilege/ui-gadget.admin</privilege>
+    </privileges>
+</manifest>
